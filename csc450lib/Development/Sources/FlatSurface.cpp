@@ -7,7 +7,7 @@
  * @param alpha the alpha value
 */
 FlatSurface::FlatSurface(float alpha) {
-    this->setAlpha(alpha);
+    alpha = alpha;
 }
 
 /**

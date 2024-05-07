@@ -10,6 +10,7 @@
 class EasySurface : public Surface {
     public:
         EasySurface(float alpha);
+        ~EasySurface() noexcept;
         float func(float x) const;
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;

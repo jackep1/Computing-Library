@@ -4,7 +4,6 @@
 using namespace csc450lib;
 using namespace csc450lib_calc;
 
-
 /**
  * The constructor for the Function1D class that sets the lower and upper bounds of the function.
  * 

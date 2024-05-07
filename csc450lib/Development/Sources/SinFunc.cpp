@@ -1,12 +1,8 @@
-//
-// Created by jack on 2/09/24.
-//
+#include <SinFunc.h>
+#include <CSC450Exception.h>
 #include <cmath>
-#include "SinFunc.h"
-#include "CSC450Exception.h"
 
 using namespace csc450lib;
-using namespace csc450lib_calc;
 
 /**
  * The default constructor for the SinFunc class.

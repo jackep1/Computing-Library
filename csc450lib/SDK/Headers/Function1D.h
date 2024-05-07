@@ -6,7 +6,7 @@
 
 namespace csc450lib_calc {
 	/**
-	 * The Function1D class is an abstract class that represents a function of one variable.
+	 * An abstract class that represents a function of one variable.
 	*/
 	class Function1D {
 

@@ -1,14 +1,7 @@
-//
-// Created by jack on 2/09/24.
-//
-#include <cmath>
-#include <vector>
-#include <algorithm>
-#include "PolynomialFunction1D.h"
-#include "CSC450Exception.h"
+#include <PolynomialFunction1D.h>
+#include <CSC450Exception.h>
 
 using namespace csc450lib;
-using namespace csc450lib_calc;
 
 /**
  * Evaluates a the polynomial function at the given x value.

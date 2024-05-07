@@ -1,6 +1,9 @@
 #ifndef SURFACE_H
 #define SURFACE_H
 
+#include <Function1D.h>
+#include <cmath>
+
 /**
  * Represents a surface in a collision problem.
 */

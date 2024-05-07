@@ -7,7 +7,7 @@
  * @param alpha the alpha value
 */
 EasySurface::EasySurface(float alpha) {
-    this->setAlpha(alpha);
+    alpha = alpha;
 }
 
 /**

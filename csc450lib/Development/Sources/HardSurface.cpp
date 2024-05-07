@@ -7,7 +7,7 @@
  * @param alpha the alpha value
 */
 HardSurface::HardSurface(float alpha) {
-    this->setAlpha(alpha);
+    alpha = alpha;
 }
 
 /**
