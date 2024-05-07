@@ -3,6 +3,7 @@
 
 #include <Function1D.h>
 #include <cmath>
+#include <vector>
 
 /**
  * Represents a surface in a collision problem.
