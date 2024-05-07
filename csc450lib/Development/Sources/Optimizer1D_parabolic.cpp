@@ -1,15 +1,13 @@
 #include "Optimizer1D_parabolic.h"
+#include <cmath>
 
 OptimizerRecord1D Optimizer1D_parabolic::minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const {
-    // Initialize the record
-    OptimizerRecord1D record;
-    record.xMin = xMin;
-    record.xMax = xMax;
-    record.tol = tol;
-    record.maxNumIters = maxNumIters;
-    record.numIters = 0;
-    record.x = startX;
-    record.fx = f->func({startX});
+    
+    // Initialize starting record values
+    float optX = xMin;
+    float optVal = xMax;
+    int numIters = 0;
+    bool isSuccess = false;
 
     // Initialize the parabolic minimum
     float x1 = xMin;
@@ -23,11 +21,11 @@ OptimizerRecord1D Optimizer1D_parabolic::minimize(float startX, float xMin, floa
     float fMinParabolic = f->func({xMinParabolic});
 
     // Loop until the tolerance is met or the maximum number of iterations is reached
-    while (std::abs(xMinParabolic - x2) > tol && record.numIters < maxNumIters) {
+    while (std::abs(xMinParabolic - x2) > tol && numIters < maxNumIters) {
         // Update the record
-        record.numIters++;
-        record.x = xMinParabolic;
-        record.fx = fMinParabolic;
+        numIters++;
+        optX = xMinParabolic;
+        optVal = fMinParabolic;
 
         // Update the parabolic minimum
         if (xMinParabolic < x2) {
@@ -52,4 +50,8 @@ OptimizerRecord1D Optimizer1D_parabolic::minimize(float startX, float xMin, floa
             }
         }
     }
+    if (numIters < maxNumIters) {
+        isSuccess = true;
+    }
+    return OptimizerRecord1D(optX, optVal, numIters, isSuccess);
 }

@@ -1,5 +1,4 @@
 #include <Optimizer1D_gss.h>
-#include <OptimizerRecord1D.h>
 #include <cmath>
 
 OptimizerRecord1D Optimizer1D_gss::minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const {
