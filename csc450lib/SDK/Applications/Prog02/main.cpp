@@ -206,40 +206,36 @@ int main(int argc, const char* argv[])
      * and inelastic surface.
     */
 
+    // Non-linear solver for finding the collision locations
+    NonLinearSolver1D_bisection bisection_solver;;
+
     // Flat surfaces with different elasticity values
     FlatSurface flat_elastic_surface(1);
     FlatSurface flat_absorbant_surface(0.5);
 
-    // Simple surfaces with different elasticity values
-    EasySurface easy_elastic_surface(1);
-    EasySurface easy_absorbant_surface(0.5);
-
-    // Non-linear solver for finding the location of the collision
-    NonLinearSolver1D_bisection bisection_solver;
-
     // Define an initial ballistic function where
     // projectile is launched directly sideways at
     // a height of 10 units and a velocity of 10 units
-    BallisticFunction ballistic(0, 10, 10, 0);
+    BallisticFunction ballistic1(0, 10, 10, 0);
 
     // Open files for writing bounce data
-    ofstream bounce1File("../../../../MMA Files/bounce1.txt");
-    ofstream bounce2File("../../../../MMA Files/bounce2.txt");
-    ofstream bounce3File("../../../../MMA Files/bounce3.txt");
-    ofstream bounce4File("../../../../MMA Files/bounce4.txt");
-    ofstream bounce5File("../../../../MMA Files/bounce5.txt");
-    vector<ofstream*> simple_bounces = {&bounce1File, &bounce2File, &bounce3File, &bounce4File, &bounce5File};
+    ofstream flat_bounce1_File("../../../../MMA Files/flat_bounce1.txt");
+    ofstream flat_bounce2_File("../../../../MMA Files/flat_bounce2.txt");
+    ofstream flat_bounce3_File("../../../../MMA Files/flat_bounce3.txt");
+    ofstream flat_bounce4_File("../../../../MMA Files/flat_bounce4.txt");
+    ofstream flat_bounce5_File("../../../../MMA Files/flat_bounce5.txt");
+    vector<ofstream*> flat_bounces = {&flat_bounce1_File, &flat_bounce2_File, &flat_bounce3_File, &flat_bounce4_File, &flat_bounce5_File};
     vector<vector<float>> trajectory;
 
     for (int i = 0; i < 5; i++) {
 
         // Define a collision problem with the perfectly elastic
         // simple surface and the ballistic function
-        shared_ptr<CollisionProblem> flight = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
+        shared_ptr<CollisionProblem> flight = make_shared<CollisionProblem>(&ballistic1, &flat_elastic_surface);
         // cout << "Flight created" << endl;
 
         // Determine a search bracket for the location of the collision
-        vector<float> search_bracket = find_search_bracket(0.01, ballistic, flight);
+        vector<float> search_bracket = find_search_bracket(0.01, ballistic1, flight);
         // cout << "Search bracket found" << endl;
 
 
@@ -255,31 +251,98 @@ int main(int argc, const char* argv[])
         // find 10 points along the trajectory of the projectile
         float time_interval = bounce.valStar / 10;
         for (int j = 0; j < 10; j++) {
-            trajectory.push_back(ballistic.getPosition(time_interval));
+            trajectory.push_back(ballistic1.getPosition(time_interval));
         }
 
         // Write the trajectory to a file
         for (int j = 0; j < 10; j++) {
-            *simple_bounces[i] << trajectory[j][0] << " " << trajectory[j][1] << endl;
+            *flat_bounces[i] << trajectory[j][0] << " " << trajectory[j][1] << endl;
         }
         cout << "Trajectory number " << i + 1 << " created and added to file" << endl;
 
         // Use the bounce information to define a new ballistic function
         // where the projectile is launched from the bounce location with
         // new position and velocity info
-        vector<float> in_info = ballistic.getPositionAndVelocity(bounce.valStar);
+        vector<float> in_info = ballistic1.getPositionAndVelocity(bounce.valStar);
+        vector<float> out_info = flat_elastic_surface.getOutgoingVelocity(in_info[0], in_info[2], in_info[3]);
+
+        // Set the new ballistic function
+        ballistic1 = BallisticFunction(out_info[0], out_info[1], out_info[2], out_info[3]);
+        // cout << "Ballistic function updated" << endl;
+    }
+    
+    /**
+     * Section for finding five bounces off of a simple surface
+     * with perfect elasticity.
+    */
+
+    /**
+    // Simple surfaces with different elasticity values
+    EasySurface easy_elastic_surface(1);
+    EasySurface easy_absorbant_surface(0.5);
+
+    // Define an initial ballistic function where
+    // projectile is launched directly sideways at
+    // a height of 10 units and a velocity of 10 units
+    BallisticFunction ballistic2(0, 10, 10, 0);
+
+    // Open files for writing bounce data
+    ofstream easy_bounce1_File("../../../../MMA Files/easy_bounce1.txt");
+    ofstream easy_bounce2_File("../../../../MMA Files/easy_bounce2.txt");
+    ofstream easy_bounce3_File("../../../../MMA Files/easy_bounce3.txt");
+    ofstream easy_bounce4_File("../../../../MMA Files/easy_bounce4.txt");
+    ofstream easy_bounce5_File("../../../../MMA Files/easy_bounce5.txt");
+    vector<ofstream*> easy_bounces = {&easy_bounce1_File, &easy_bounce2_File, &easy_bounce3_File, &easy_bounce4_File, &easy_bounce5_File};
+
+    for (int i = 0; i < 5; i++) {
+
+        // Define a collision problem with the perfectly elastic
+        // simple surface and the ballistic function
+        shared_ptr<CollisionProblem> flight = make_shared<CollisionProblem>(&ballistic2, &easy_elastic_surface);
+        // cout << "Flight created" << endl;
+
+        // Determine a search bracket for the location of the collision
+        vector<float> search_bracket = find_search_bracket(0.01, ballistic2, flight);
+        // cout << "Search bracket found" << endl;
+
+
+        // Find the exact time of collision
+        NonLinearSolverRecord1D bounce = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight), search_bracket[0], search_bracket[1], 100, 0.01);
+        if (!bounce.isSuccess) {
+            cout << "Bisection failed to find bounce location" << endl;
+            exit(1);
+        }
+        // cout << "Time of bounce found" << endl;
+
+        // Use the ballistic function info and bounce location to
+        // find 10 points along the trajectory of the projectile
+        float time_interval = bounce.valStar / 10;
+        for (int j = 0; j < 10; j++) {
+            trajectory.push_back(ballistic2.getPosition(time_interval));
+        }
+
+        // Write the trajectory to a file
+        for (int j = 0; j < 10; j++) {
+            *easy_bounces[i] << trajectory[j][0] << " " << trajectory[j][1] << endl;
+        }
+        cout << "Trajectory number " << i + 1 << " created and added to file" << endl;
+
+        // Use the bounce information to define a new ballistic function
+        // where the projectile is launched from the bounce location with
+        // new position and velocity info
+        vector<float> in_info = ballistic2.getPositionAndVelocity(bounce.valStar);
         vector<float> out_info = easy_elastic_surface.getOutgoingVelocity(in_info[0], in_info[2], in_info[3]);
 
         // Set the new ballistic function
-        ballistic = BallisticFunction(out_info[0], out_info[1], out_info[2], out_info[3]);
+        ballistic2 = BallisticFunction(out_info[0], out_info[1], out_info[2], out_info[3]);
         // cout << "Ballistic function updated" << endl;
     }
-
+    
 
     // Complex surfaces with different elasticity values
     // Defined as 4sin(x) + 5cos(x/2) + (x^3)/10000
     HardSurface hard_elastic_surface(1);
     HardSurface hard_absorbant_surface(0.5);
-
+    */
     return 0;
 }
