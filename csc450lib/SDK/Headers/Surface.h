@@ -17,20 +17,19 @@ class Surface : public csc450lib_calc::Function1D {
          * @return a vector containing {x, Voutx, Vouty} of the object after the collision
         */
         std::vector<float> getOutgoingVelocity(float x, float Vinx, float Viny) const {
-            float Voutx = Vinx * alpha;
-            float Vouty = Viny * alpha;
-            return std::vector<float>{x, Voutx, Vouty};
+            float n1 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * this->dfunc(x);
+            float n2 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * 1;
+            vector<float> normal_force = vector<float>{n1, n2};
+            vector<float> aN = vector<float>{alpha * normal_force[0], alpha * normal_force[1]};
+            vector<float> Vout = vector<float>{Vinx + aN[0], Viny + aN[1]};
+            return std::vector<float>{x, Vout[0], Vout[1]};
         }
+
         /**
          * Sets the 'a' or elasticity value of the surface.
         */
         void setAlpha(float alpha) { this->alpha = alpha; }
 
-        /** Some methods which will need to be implemented by any actual Surfaces */
-        // float func(float x) const;
-        // std::shared_ptr<std::string> getExpressionMMA() const;
-        // bool derivativeIsExact() const;
-        // bool secondDerivativeIsExact() const;
     private:
         // The elasticity value of the surface
         float alpha;
