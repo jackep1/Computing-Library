@@ -11,6 +11,7 @@
 #include <SinFunc.h>
 #include <PolynomialFunction1D.h>
 
+#include <FlatSurface.h>
 #include <EasySurface.h>
 #include <HardSurface.h>
 #include <BallisticFunction.h>
@@ -71,6 +72,7 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
             last_right = b;
             b *= 0.9;
             right_height = flight->func(b);
+            cout << b << endl;
         }
 
         // Set b to last positive value
@@ -200,9 +202,13 @@ int main(int argc, const char* argv[])
 
 
     /**
-     * Section for finding five bounces off of a relatively simple
-     * and inelastic surface. The surface is defined as cos(x)/5 + 1
+     * Section for finding five bounces off of a flat
+     * and inelastic surface.
     */
+
+    // Flat surfaces with different elasticity values
+    FlatSurface flat_elastic_surface(1);
+    FlatSurface flat_absorbant_surface(0.5);
 
     // Simple surfaces with different elasticity values
     EasySurface easy_elastic_surface(1);
