@@ -12,6 +12,10 @@
 #include "HardSurface.h"
 #include "BallisticFunction.h"
 #include "CollisionProblem.h"
+#include <NonLinearSolver1D.h>
+#include <NonLinearSolver1D_bisection.h>
+#include <NonLinearSolver1D_NewtonRaphson.h>
+#include <NonLinearSolver1D_secant.h>
 #include <CSC450Exception.h>
 
 using namespace std;
@@ -128,6 +132,17 @@ int main(int argc, const char* argv[])
     // and the ballistic function
     CollisionProblem easy_elastic_collision(&ballistic, &easy_elastic_surface);
 
+    // Determine a search bracket for the location of the collision
+    float TOL = 0.01;
+    float left = 0.01;
+    float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
+    float right = peak_time * 2;
+    while (easy_elastic_collision.func(right) > 0) {
+        right *= 1.1;
+    }
+
+    
+    
 
     return 0;
 }
