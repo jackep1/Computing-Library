@@ -22,7 +22,7 @@ BallisticFunction::BallisticFunction(float x0, float y0, float Vx0, float Vy0) {
  * Gets the position of the object at time t.
  * 
  * @param t the time to get the position at
- * @return a vector containing the x and y positions of the object at time t
+ * @return a vector containing {x, y} of the object at time t
 */
 std::vector<float> BallisticFunction::getPosition(float t) const {
     float x = this->x0 + this->Vx0 * t;
@@ -34,7 +34,7 @@ std::vector<float> BallisticFunction::getPosition(float t) const {
  * Gets the position and velocity of the object at time t.
  * 
  * @param t the time to get the position and velocity at
- * @return a vector containing the x and y positions and the x and y velocities of the object at time t
+ * @return a vector containing {x, y, Vx, Vy} of the object at time t
 */
 std::vector<float> BallisticFunction::getPositionAndVelocity(float t) const {
     float x = this->x0 + this->Vx0 * t;

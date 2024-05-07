@@ -22,6 +22,11 @@ void Surface::setAlpha(float alpha) {
 
 /**
  * Gets the outgoing velocity of the object after a collision with the surface.
+ * 
+ * @param x the x position of the object
+ * @param Vinx the x velocity of the object
+ * @param Viny the y velocity of the object
+ * @return a vector containing {x, Voutx, Vouty} of the object after the collision
 */
 std::vector<float> Surface::getOutgoingVelocity(float x, float Vinx, float Viny) const {
     float Voutx = Vinx * alpha;

@@ -1,22 +1,25 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include "Function1D.h"
-#include "CSC450Lib.h"
-#include "CosFunc.h"
-#include "CosFuncNoDerivative.h"
-#include "SinFunc.h"
-#include "PolynomialFunction1D.h"
-#include "Surface.h"
-#include "EasySurface.h"
-#include "HardSurface.h"
-#include "BallisticFunction.h"
-#include "CollisionProblem.h"
+
+#include <CSC450Lib.h>
+#include <CSC450Exception.h>
+
+#include <Function1D.h>
+#include <CosFunc.h>
+#include <CosFuncNoDerivative.h>
+#include <SinFunc.h>
+#include <PolynomialFunction1D.h>
+
+#include <EasySurface.h>
+#include <HardSurface.h>
+#include <BallisticFunction.h>
+#include <CollisionProblem.h>
+
 #include <NonLinearSolver1D.h>
 #include <NonLinearSolver1D_bisection.h>
 #include <NonLinearSolver1D_NewtonRaphson.h>
 #include <NonLinearSolver1D_secant.h>
-#include <CSC450Exception.h>
 
 using namespace std;
 using namespace csc450lib;
@@ -77,15 +80,14 @@ int main(int argc, const char* argv[])
 
     ofstream cosExactFile("../../../../MMA Files/cosd.txt");
     ofstream cosApproxFile("../../../../MMA Files/cosad.txt");
-    // ofstream sinFile("../../../../MMA Files/sind.txt");
-
     ofstream pdFile("../../../../MMA Files/pd.txt");
-    // ofstream p2File("../../../../MMA Files/p2d.txt");
 
 
-    // Section for testing derivative functionality begins with
-    // the cosine function defined for positive numbers, one
-    // version with the derivative exactly implemented and one without
+    /** 
+     * Section for testing derivative functionality begins with
+     * the cosine function defined for positive numbers, one
+     * version with the derivative exactly implemented and one without
+    */
     CosFunc f (0, inf);
     CosFuncNoDerivative g (0, inf);
     shared_ptr<PolynomialFunction1D> h = make_shared<PolynomialFunction1D>(vector<float>{1, 2, 3});
@@ -136,6 +138,7 @@ int main(int argc, const char* argv[])
             continue;
         }
     }
+    cosExactFile.close();
 
     // Calculate the approximate derivative of several cosine points and write to file
     for (float x = 0; x < 10; x += 0.1) {
@@ -145,6 +148,7 @@ int main(int argc, const char* argv[])
             continue;
         }
     }
+    cosApproxFile.close();
 
     // Calculate the derivative of several polynomial points and write to file
     for (float x = 0; x < 10; x += 0.1) {
@@ -154,6 +158,7 @@ int main(int argc, const char* argv[])
             continue;
         }
     }
+    pdFile.close();
 
     // Calculate the approximate derivative of several points along polynomial function and write to file
     cout << "Time to calculate exact derivative: " << exact_duration.count() << " microseconds" << endl;
@@ -161,39 +166,76 @@ int main(int argc, const char* argv[])
     cout << "Time to calculate polynomial derivative: " << polynomial_approx_duration.count() << " microseconds" << endl;
     cout << "PolynomialFunction1D h's derivative at x = 1: " << h->dfunc(1) << endl;
 
+
+    /**
+     * Section for finding five bounces off of a relatively simple
+     * and inelastic surface. The surface is defined as cos(x)/5
+    */
+
     // Simple surfaces with different elasticity values
-    // Defined as cos(x)/5
     EasySurface easy_elastic_surface(1);
     EasySurface easy_absorbant_surface(0.5);
 
-    // Complex surfaces with different elasticity values
-    // Defined as
-    HardSurface hard_elastic_surface(1);
-    HardSurface hard_absorbant_surface(0.5);
-    
+    // Non-linear solver for finding the location of the collision
+    NonLinearSolver1D_bisection bisection_solver;
+
     // Define an initial ballistic function where
     // projectile is launched directly sideways at
     // a height of 10 units and a velocity of 10 units
     BallisticFunction ballistic(0, 10, 10, 0);
 
-    // Define a collision problem with the perfectly elastic simple surface
-    // and the ballistic function
-    shared_ptr<CollisionProblem> flight1 = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
+    // Open files for writing bounce data
+    ofstream bounce1File("../../../../MMA Files/bounce1.txt");
+    ofstream bounce2File("../../../../MMA Files/bounce2.txt");
+    ofstream bounce3File("../../../../MMA Files/bounce3.txt");
+    ofstream bounce4File("../../../../MMA Files/bounce4.txt");
+    ofstream bounce5File("../../../../MMA Files/bounce5.txt");
+    vector<ofstream*> simple_bounces = {&bounce1File, &bounce2File, &bounce3File, &bounce4File, &bounce5File};
+    vector<vector<float>> trajectory;
 
-    // Determine a search bracket for the location of the collision
-    vector<float> search_bracket = find_search_bracket(0.01, ballistic, flight1);
+    for (int i = 0; i < 5; i++) {
 
-    // Find the exact time of collision
-    NonLinearSolver1D_bisection bisection_solver;
-    NonLinearSolverRecord1D bounce1 = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight1), search_bracket[0], search_bracket[1], 100, 0.01);
-    if (!bounce1.isSuccess) {
-        cout << "Bisection failed to find bounce location" << endl;
-        exit(1);
+        // Define a collision problem with the perfectly elastic
+        // simple surface and the ballistic function
+        shared_ptr<CollisionProblem> flight = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
+
+        // Determine a search bracket for the location of the collision
+        vector<float> search_bracket = find_search_bracket(0.01, ballistic, flight);
+
+        // Find the exact time of collision
+        NonLinearSolverRecord1D bounce = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight), search_bracket[0], search_bracket[1], 100, 0.01);
+        if (!bounce.isSuccess) {
+            cout << "Bisection failed to find bounce location" << endl;
+            exit(1);
+        }
+
+        // Use the ballistic function info and bounce location to
+        // find 10 points along the trajectory of the projectile
+        float time_interval = bounce.valStar / 10;
+        for (int j = 0; j < 10; j++) {
+            trajectory.push_back(ballistic.getPosition(time_interval));
+        }
+        
+        // Write the trajectory to a file
+        for (int j = 0; j < 10; j++) {
+            *simple_bounces[i] << trajectory[j][0] << " " << trajectory[j][1] << endl;
+        }
+
+        // Use the bounce information to define a new ballistic function
+        // where the projectile is launched from the bounce location with
+        // new position and velocity info
+        vector<float> in_info = ballistic.getPositionAndVelocity(bounce.valStar);
+        vector<float> out_info = easy_elastic_surface.getOutgoingVelocity(in_info[0], in_info[2], in_info[3]);
+
+        // Set the new ballistic function
+        ballistic = BallisticFunction(out_info[0], out_info[1], out_info[2], out_info[3]);
     }
 
-    // Use the first bounce information to define a new ballistic function
-    // where the projectile is launched from the bounce location with the
-    
+
+    // Complex surfaces with different elasticity values
+    // Defined as 4sin(x) + 5cos(x/2) + (x^3)/10000
+    HardSurface hard_elastic_surface(1);
+    HardSurface hard_absorbant_surface(0.5);
 
     return 0;
 }
