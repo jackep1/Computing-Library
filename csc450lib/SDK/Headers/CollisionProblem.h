@@ -5,7 +5,7 @@
 #ifndef COLLISIONPROBLEM_H
 #define COLLISIONPROBLEM_H
 
-class CollisionProblem : csc450lib_calc::Function1D {
+class CollisionProblem : public csc450lib_calc::Function1D {
     public:
         // Public methods for the interface
         CollisionProblem(BallisticFunction* ballistic, Surface* surface);

@@ -15,10 +15,10 @@ class Optimizer1D {
         Optimizer1D& operator =(Optimizer1D&& obj) = delete;
 
         // Public methods
-        Optimizer1D(std::shared_ptr<Function1D> f);
-        void setFunction(std::shared_ptr<Function1D> f);
-        std::shared_ptr<const Function1D> getFunction() const;
-        virtual OptimizerRecord1D minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const;
+        Optimizer1D(std::shared_ptr<Function1D> f) { this->f = f; }
+        void setFunction(std::shared_ptr<Function1D> f) { this->f = f;}
+        std::shared_ptr<const Function1D> getFunction() const { return f; };
+        virtual OptimizerRecord1D minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const = 0;
 
         std::shared_ptr<Function1D> f;
 };
