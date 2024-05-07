@@ -8,7 +8,6 @@
 #include <Function1D.h>
 #include <CosFunc.h>
 #include <CosFuncNoDerivative.h>
-#include <SinFunc.h>
 #include <PolynomialFunction1D.h>
 
 #include <FlatSurface.h>
@@ -44,6 +43,9 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
     // Start left end of bracket at tolerance
     float a = TOL;
     float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
+    if (peak_time <= 0) {
+        peak_time = 0.01;
+    }
 
     // Right end of bracket is at point symmetric to start
     float b = peak_time * 2;
@@ -52,7 +54,9 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
     float right_height = flight->func(b);
     
     // If right bracket is positive, increase b by 10% until negative value is found
-    while (right_height > 0) {
+    int count = 0;
+    int max_count = 100;
+    while (right_height > 0 && count < max_count) {
         if (a < b) {
             a = b;
         }
