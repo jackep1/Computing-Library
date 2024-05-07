@@ -22,6 +22,54 @@ using namespace std;
 using namespace csc450lib;
 using namespace csc450lib_calc;
 
+/**
+ * Find the search bracket for the location of the collision. Left bracket is
+ * set to the tolerance and the right bracket is set to the point where the
+ * height is negative. If the right bracket is positive, the right bracket is
+ * increased by 10% until a negative value is found. If the right bracket is
+ * negative, the right bracket is decreased by 10% until a positive value is
+ * found. The left bracket is set to the largest positive value found.
+ * 
+ * @param TOL The tolerance for the search bracket
+ * @param ballistic The ballistic function
+ * @param flight The collision problem
+ * @return A vector containing the left and right ends of the search bracket
+*/
+vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, shared_ptr<CollisionProblem> flight) {
+
+    // Start left end of bracket at tolerance
+    float a = TOL;
+    // Get time of 
+    float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
+    // Right end of bracket is at point symmetric to start
+    float b = peak_time * 2;
+
+    // Determine sign of right bracket, if negative, find last positive value
+    float right_height = flight->func(b);
+    if (right_height < 0) {
+        // Store last positive value
+        float last_right = b;
+        // Reduce b by 10% until positive value is found
+        while (right_height < 0) {
+            last_right = b;
+            b *= 0.9;
+            right_height = flight->func(b);
+        }
+        // Set b to last positive value
+        b = last_right;
+        return vector<float>{a, b};
+    }
+
+    // If right bracket is positive, increase b by 10% until negative value is found
+    while (flight->func(b) > 0) {
+        if (a < b) {
+            a = b;
+        }
+        b *= 1.1;
+    }
+    return vector<float>{a, b};
+}
+
 int main(int argc, const char* argv[])
 {
     float inf = INFINITY;
@@ -130,20 +178,22 @@ int main(int argc, const char* argv[])
 
     // Define a collision problem with the perfectly elastic simple surface
     // and the ballistic function
-    shared_ptr<CollisionProblem> bounce1 = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
+    shared_ptr<CollisionProblem> flight1 = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
 
     // Determine a search bracket for the location of the collision
-    float TOL = 0.01;
-    float left = 0.01;
-    float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
-    float right = peak_time * 2;
-    while (bounce1->func(right) > 0) {
-        right *= 1.1;
-    }
+    vector<float> search_bracket = find_search_bracket(0.01, ballistic, flight1);
 
     // Find the exact time of collision
     NonLinearSolver1D_bisection bisection_solver;
-    NonLinearSolverRecord1D bounce1 = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(bounce1), left, right, 100, TOL);
+    NonLinearSolverRecord1D bounce1 = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight1), search_bracket[0], search_bracket[1], 100, 0.01);
+    if (!bounce1.isSuccess) {
+        cout << "Bisection failed to find bounce location" << endl;
+        exit(1);
+    }
+
+    // Use the first bounce information to define a new ballistic function
+    // where the projectile is launched from the bounce location with the
+    
 
     return 0;
 }
