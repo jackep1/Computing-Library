@@ -64,7 +64,7 @@ int main(int argc, const char* argv[])
     auto start = chrono::high_resolution_clock::now();
     cout << "CosFunc f's derivative at x = 1: " << f.dfunc(1) << endl;
     auto stop = chrono::high_resolution_clock::now();
-    auto exact_duration = std::chrono::duration_cast<chrono::microseconds>(stop - start);
+    auto exact_duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 
     // Calculate derivative at x = 1 using approximation and time it.
     start = chrono::high_resolution_clock::now();
@@ -130,19 +130,20 @@ int main(int argc, const char* argv[])
 
     // Define a collision problem with the perfectly elastic simple surface
     // and the ballistic function
-    CollisionProblem easy_elastic_collision(&ballistic, &easy_elastic_surface);
+    shared_ptr<CollisionProblem> bounce1 = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
 
     // Determine a search bracket for the location of the collision
     float TOL = 0.01;
     float left = 0.01;
     float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
     float right = peak_time * 2;
-    while (easy_elastic_collision.func(right) > 0) {
+    while (bounce1->func(right) > 0) {
         right *= 1.1;
     }
 
-    
-    
+    // Find the exact time of collision
+    NonLinearSolver1D_bisection bisection_solver;
+    NonLinearSolverRecord1D bounce1 = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(bounce1), left, right, 100, TOL);
 
     return 0;
 }
