@@ -43,66 +43,22 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
 
     // Start left end of bracket at tolerance
     float a = TOL;
-    float peak_time;
-    // Get time of peak height
-    if (ballistic.getPositionAndVelocity(0)[3] <= 0) {
-        // If not moving up, set peak time to 0.01
-        peak_time = 0.01;
-    } else {
-        // If moving up, set peak time with Vy0 / g
-        peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
-        cout << "Peak time: " << peak_time << endl;
-    }
-    // cout << "Time of peak found" << endl;
+    float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
 
     // Right end of bracket is at point symmetric to start
     float b = peak_time * 2;
-    cout << b << " " << flight->func(b) << endl;
 
     // Determine sign of right bracket, if negative, find last positive value
     float right_height = flight->func(b);
-    // int count = 0; int max = 100;
-
-    if (right_height < 0 /*&& count < max*/) {
-        // Store last positive value
-        float last_right = b;
-        cout << "Search for right bracket started from negative value" << right_height << endl;
-        // Reduce b by 10% until positive value is found
-        while (right_height < 0) {
-            last_right = b;
-            b *= 0.9;
-            right_height = flight->func(b);
-            cout << b << endl;
-        }
-
-        // Set b to last positive value
-        b = last_right;
-        cout << "Right bracket found from intially negative value" << endl;
-        return vector<float>{a, b};
-    }
     
-
-    // if (count >= max) {
-    //     cout << "Failed to find right bracket" << endl;
-    //     exit(1);
-    // }
-    // count = 0;
-    // cout << "Search for right bracket started from positive value" << endl;
     // If right bracket is positive, increase b by 10% until negative value is found
-    while (right_height > 0 /*&& count < max*/) {
+    while (right_height > 0) {
         if (a < b) {
             a = b;
         }
-        //cout << "Possible endpoint " << count << ": " << b << endl;
         b *= 1.1;
         right_height = flight->func(b);
-        //count++;
     }
-    // if (count >= max) {
-    //     cout << "Failed to find right bracket" << endl;
-    //     exit(1);
-    // }
-    // cout << "Right bracket found from initially positive value" << endl;
 
     return vector<float>{a, b};
 }
@@ -213,10 +169,10 @@ int main(int argc, const char* argv[])
     FlatSurface flat_elastic_surface(1);
     FlatSurface flat_absorbant_surface(0.5);
 
-    // Define an initial ballistic function where
-    // projectile is launched directly sideways at
-    // a height of 10 units and a velocity of 10 units
-    BallisticFunction ballistic1(0, 10, 10, 0);
+    // Initial ballistic function where projectile
+    // is launched from a height of 10 units with
+    // both vertical and horizontal velocities of 10 units
+    BallisticFunction ballistic1(0, 10, 10, 10);
 
     // Open files for writing bounce data
     ofstream flat_bounce1_File("../../../../MMA Files/flat_bounce1.txt");

@@ -40,7 +40,7 @@ std::vector<float> BallisticFunction::getPositionAndVelocity(float t) const {
     float x = this->x0 + this->Vx0 * t;
     float y = this->y0 + (this->Vy0 * t) - (0.5 * 9.8 * t * t);
     float Vx = this->Vx0;
-    float Vy = this->Vy0 - (9.8 * ((x - this->x0) / Vx));
+    float Vy = this->Vy0 - (9.8 * t);
     return std::vector<float>{x, y, Vx, Vy};
 }
 
