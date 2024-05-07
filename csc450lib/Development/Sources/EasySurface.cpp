@@ -17,7 +17,7 @@ EasySurface::EasySurface(float alpha) {
  * @return the height of the surface at x
 */
 float EasySurface::func(float x) const {
-    return cosf(x) / 5;
+    return (cosf(x) / 5) + 1;
 }
 
 /**
@@ -38,6 +38,6 @@ bool EasySurface::secondDerivativeIsExact() const {
  * @return the expression of the surface in Mathematica format
 */
 std::shared_ptr<std::string> EasySurface::getExpressionMMA() const {
-    std::shared_ptr<std::string> expression(new std::string("Cos[x]/5"));
+    std::shared_ptr<std::string> expression(new std::string("Cos[x]/5 + 1"));
     return expression;
 }

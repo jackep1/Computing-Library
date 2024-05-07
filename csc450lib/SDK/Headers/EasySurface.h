@@ -5,7 +5,7 @@
 
 /**
  * The EasySurface class represents a surface defined
- * by the function f(x) = cos(x)/5.
+ * by the function f(x) = cos(x)/5 + 1.
 */
 class EasySurface : public Surface {
     public:
