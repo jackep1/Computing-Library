@@ -1,24 +1,27 @@
-#include <Function1D.h>
-#include "NonLinearSolverRecord1D.h"
 #ifndef NONLINEARSOLVER1D_H
 #define NONLINEARSOLVER1D_H
 
-using namespace csc450lib_calc;
+#include <NonLinearSolverRecord1D.h>
+#include <Function1D.h>
 
-class NonLinearSolver1D {
+namespace csc450lib_calc {
 
-    public:
-        // Copy and move constructors not needed
-        virtual ~NonLinearSolver1D() = default;
-        NonLinearSolver1D(const NonLinearSolver1D& obj) = delete;
-        NonLinearSolver1D(NonLinearSolver1D&& obj) = delete;
-        NonLinearSolver1D& operator =(const NonLinearSolver1D& obj) = delete;
-        NonLinearSolver1D& operator =(NonLinearSolver1D&& obj) = delete;
+    class NonLinearSolver1D {
 
-        // Public methods for the interface
-        NonLinearSolver1D() = default;
-        // For solving the given function
-        virtual NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> f, float a, float b, int n, float tol) const = 0;
-};
+        public:
+            // Copy and move constructors not needed
+            virtual ~NonLinearSolver1D() = default;
+            NonLinearSolver1D(const NonLinearSolver1D& obj) = delete;
+            NonLinearSolver1D(NonLinearSolver1D&& obj) = delete;
+            NonLinearSolver1D& operator =(const NonLinearSolver1D& obj) = delete;
+            NonLinearSolver1D& operator =(NonLinearSolver1D&& obj) = delete;
 
-#endif
+            // Public methods for the interface
+            NonLinearSolver1D() = default;
+            // For solving the given function
+            virtual NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> f, float a, float b, int n, float tol) const = 0;
+    };
+}
+
+
+#endif // NONLINEARSOLVER1D_H

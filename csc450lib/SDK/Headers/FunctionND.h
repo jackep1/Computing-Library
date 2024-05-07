@@ -1,15 +1,13 @@
-#include <memory>
-#include <limits>
-#include <vector>
-
 #ifndef FUNCTIONND_H
 #define FUNCTIONND_H
+
+#include <vector>
 
 namespace csc450lib_calc {
     /**
      * The FunctionND class is an abstract class that represents a function of n variables.
     */
-   class FunctionND {
+    class FunctionND {
 
         public:
             // Don't need copy and move constructors and assignment operators
@@ -24,6 +22,8 @@ namespace csc450lib_calc {
             FunctionND(int n);
             virtual float func(const std::vector<float>& x) = 0;
 
+            // The number of dimensions of the function
+            int N;
    };
 }
 

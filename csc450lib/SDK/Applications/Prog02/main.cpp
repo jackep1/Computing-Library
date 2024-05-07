@@ -16,14 +16,9 @@
 #include <BallisticFunction.h>
 #include <CollisionProblem.h>
 
-#include <NonLinearSolver1D.h>
 #include <NonLinearSolver1D_bisection.h>
-#include <NonLinearSolver1D_NewtonRaphson.h>
-#include <NonLinearSolver1D_secant.h>
 
 using namespace std;
-using namespace csc450lib;
-using namespace csc450lib_calc;
 
 /**
  * Find the search bracket for the location of the collision. Left bracket is

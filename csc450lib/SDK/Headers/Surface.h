@@ -1,11 +1,8 @@
-#include <Function1D.h>
-#include <vector>
-#include <cmath>
 #ifndef SURFACE_H
 #define SURFACE_H
 
 /**
- * Surface class; represents a surface in a collision problem.
+ * Represents a surface in a collision problem.
 */
 class Surface : public csc450lib_calc::Function1D {
     public:

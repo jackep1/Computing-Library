@@ -1,6 +1,9 @@
 #ifndef NONLINEARSOLVER1D_BISECTION_H
+#define NONLINEARSOLVER1D_BISECTION_H
 
-#include "NonLinearSolver1D.h"
+#include <NonLinearSolver1D.h>
+
+using namespace csc450lib_calc;
 
 class NonLinearSolver1D_bisection : public NonLinearSolver1D {
     public:

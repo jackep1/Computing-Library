@@ -1,17 +1,9 @@
-#include "Function1D.h"
-#include "CSC450Exception.h"
+#include <Function1D.h>
+#include <CSC450Exception.h>
 
 using namespace csc450lib;
 using namespace csc450lib_calc;
 
-// Function1D::Function1D()
-// {
-// }
-// 
-// 
-// Function1D::~Function1D()
-// {
-// }
 
 /**
  * The constructor for the Function1D class that sets the lower and upper bounds of the function.

@@ -1,5 +1,4 @@
 #include <BallisticFunction.h>
-#include <cmath>
 
 /**
  * The constructor for the BallisticFunctions which
@@ -43,27 +42,3 @@ std::vector<float> BallisticFunction::getPositionAndVelocity(float t) const {
     float Vy = this->Vy0 - (9.8 * t);
     return std::vector<float>{x, y, Vx, Vy};
 }
-
-// float BallisticFunction::func(float x) const {
-
-// }
-
-// float BallisticFunction::dfunc(float x) const {
-
-// }
-
-// std::vector<float> BallisticFunction::getAltitudeAndVelocity(float x) const {
-//     return std::vector<float>{this->func(x), this->Vx0, this->Vy0};
-// }
-
-// std::shared_ptr<std::string> BallisticFunction::getExpressionMMA() const {
-//     return std::make_shared<std::string>("BallisticFunction");
-// }
-
-// bool BallisticFunction::derivativeIsExact() const {
-//     return false;
-// }
-
-// bool BallisticFunction::secondDerivativeIsExact() const {
-//     return false;
-// }

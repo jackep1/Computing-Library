@@ -1,6 +1,9 @@
-#include "Optimizer1D.h"
 #ifndef OPTIMIZER1D_GSS_H
 #define OPTIMIZER1D_GSS_H
+
+#include <Optimizer1D.h>
+
+using namespace csc450lib_calc;
 
 class Optimizer1D_gss : public Optimizer1D {
     public:

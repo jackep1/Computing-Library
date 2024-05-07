@@ -1,7 +1,7 @@
 #ifndef CosFuncNoDerivative_H
 #define CosFuncNoDerivative_H
 
-#include "Function1D.h"
+#include <Function1D.h>
 
 class CosFuncNoDerivative : public csc450lib_calc::Function1D {
 	public:

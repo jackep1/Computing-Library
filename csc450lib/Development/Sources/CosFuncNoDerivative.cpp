@@ -1,10 +1,8 @@
+#include <CosFuncNoDerivative.h>
+#include <CSC450Exception.h>
 #include <cmath>
-#include "CosFuncNoDerivative.h"
-#include "CSC450Exception.h"
 
 using namespace csc450lib;
-using namespace csc450lib_calc;
-
 
 /**
  * The default constructor for the CosFuncNoDerivative class.
