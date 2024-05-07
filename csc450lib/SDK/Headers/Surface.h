@@ -1,5 +1,6 @@
 #include <Function1D.h>
 #include <vector>
+#include <cmath>
 #ifndef SURFACE_H
 #define SURFACE_H
 
@@ -19,9 +20,9 @@ class Surface : public csc450lib_calc::Function1D {
         std::vector<float> getOutgoingVelocity(float x, float Vinx, float Viny) const {
             float n1 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * this->dfunc(x);
             float n2 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * 1;
-            vector<float> normal_force = vector<float>{n1, n2};
-            vector<float> aN = vector<float>{alpha * normal_force[0], alpha * normal_force[1]};
-            vector<float> Vout = vector<float>{Vinx + aN[0], Viny + aN[1]};
+            std::vector<float> normal_force = std::vector<float>{n1, n2};
+            std::vector<float> aN = std::vector<float>{alpha * normal_force[0], alpha * normal_force[1]};
+            std::vector<float> Vout = std::vector<float>{Vinx + aN[0], Viny + aN[1]};
             return std::vector<float>{x, Vout[0], Vout[1]};
         }
 

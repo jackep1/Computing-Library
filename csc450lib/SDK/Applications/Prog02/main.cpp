@@ -50,10 +50,13 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
     } else {
         // If moving up, set peak time with Vy0 / g
         peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
+        cout << "Peak time: " << peak_time << endl;
     }
+    // cout << "Time of peak found" << endl;
 
     // Right end of bracket is at point symmetric to start
     float b = peak_time * 2;
+    cout << b << " " << flight->func(b) << endl;
 
     // Determine sign of right bracket, if negative, find last positive value
     float right_height = flight->func(b);
@@ -62,6 +65,7 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
     if (right_height < 0 /*&& count < max*/) {
         // Store last positive value
         float last_right = b;
+        cout << "Search for right bracket started from negative value" << right_height << endl;
         // Reduce b by 10% until positive value is found
         while (right_height < 0) {
             last_right = b;
@@ -71,15 +75,17 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
 
         // Set b to last positive value
         b = last_right;
+        cout << "Right bracket found from intially negative value" << endl;
         return vector<float>{a, b};
     }
+    
 
     // if (count >= max) {
     //     cout << "Failed to find right bracket" << endl;
     //     exit(1);
     // }
     // count = 0;
-
+    // cout << "Search for right bracket started from positive value" << endl;
     // If right bracket is positive, increase b by 10% until negative value is found
     while (right_height > 0 /*&& count < max*/) {
         if (a < b) {
@@ -94,6 +100,7 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
     //     cout << "Failed to find right bracket" << endl;
     //     exit(1);
     // }
+    // cout << "Right bracket found from initially positive value" << endl;
 
     return vector<float>{a, b};
 }
@@ -194,7 +201,7 @@ int main(int argc, const char* argv[])
 
     /**
      * Section for finding five bounces off of a relatively simple
-     * and inelastic surface. The surface is defined as cos(x)/5
+     * and inelastic surface. The surface is defined as cos(x)/5 + 1
     */
 
     // Simple surfaces with different elasticity values
@@ -223,11 +230,11 @@ int main(int argc, const char* argv[])
         // Define a collision problem with the perfectly elastic
         // simple surface and the ballistic function
         shared_ptr<CollisionProblem> flight = make_shared<CollisionProblem>(&ballistic, &easy_elastic_surface);
-        cout << "Check" << endl;
+        // cout << "Flight created" << endl;
 
         // Determine a search bracket for the location of the collision
         vector<float> search_bracket = find_search_bracket(0.01, ballistic, flight);
-        cout << "Check2" << endl;
+        // cout << "Search bracket found" << endl;
 
 
         // Find the exact time of collision
@@ -236,7 +243,7 @@ int main(int argc, const char* argv[])
             cout << "Bisection failed to find bounce location" << endl;
             exit(1);
         }
-        cout << "Check3" << endl;
+        // cout << "Time of bounce found" << endl;
 
         // Use the ballistic function info and bounce location to
         // find 10 points along the trajectory of the projectile
@@ -244,23 +251,22 @@ int main(int argc, const char* argv[])
         for (int j = 0; j < 10; j++) {
             trajectory.push_back(ballistic.getPosition(time_interval));
         }
-        cout << "Check4" << endl;
 
         // Write the trajectory to a file
         for (int j = 0; j < 10; j++) {
             *simple_bounces[i] << trajectory[j][0] << " " << trajectory[j][1] << endl;
         }
-        cout << "Check5" << endl;
+        cout << "Trajectory number " << i + 1 << " created and added to file" << endl;
 
         // Use the bounce information to define a new ballistic function
         // where the projectile is launched from the bounce location with
         // new position and velocity info
         vector<float> in_info = ballistic.getPositionAndVelocity(bounce.valStar);
         vector<float> out_info = easy_elastic_surface.getOutgoingVelocity(in_info[0], in_info[2], in_info[3]);
-        cout << "Check6" << endl;
 
         // Set the new ballistic function
         ballistic = BallisticFunction(out_info[0], out_info[1], out_info[2], out_info[3]);
+        // cout << "Ballistic function updated" << endl;
     }
 
 
