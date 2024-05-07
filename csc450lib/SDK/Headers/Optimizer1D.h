@@ -20,7 +20,6 @@ class Optimizer1D {
         std::shared_ptr<const Function1D> getFunction() const;
         virtual OptimizerRecord1D minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const;
 
-    private:
         std::shared_ptr<Function1D> f;
 };
 

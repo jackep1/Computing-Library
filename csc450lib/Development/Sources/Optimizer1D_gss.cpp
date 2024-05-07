@@ -1,15 +1,14 @@
-#include "Optimizer1D_gss.h"
+#include <Optimizer1D_gss.h>
+#include <OptimizerRecord1D.h>
+#include <cmath>
 
 OptimizerRecord1D Optimizer1D_gss::minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const {
-    // Initialize the record
-    OptimizerRecord1D record;
-    record.xMin = xMin;
-    record.xMax = xMax;
-    record.tol = tol;
-    record.maxNumIters = maxNumIters;
-    record.numIters = 0;
-    record.x = startX;
-    record.fx = f->func({startX});
+
+    // Initialize starting record values
+    float optX = xMin;
+    float optVal = xMax;
+    int numIters = 0;
+    bool isSuccess = false;
 
     // Initialize the golden ratio
     float phi = (1.0f + std::sqrt(5.0f)) / 2.0f;
@@ -18,13 +17,13 @@ OptimizerRecord1D Optimizer1D_gss::minimize(float startX, float xMin, float xMax
     // Initialize the golden section search
     float x1 = xMin + resphi * (xMax - xMin);
     float x2 = xMin + phi * (xMax - xMin);
-    float f1 = f->func({x1});
-    float f2 = f->func({x2});
+    float f1 = this->f->func({x1});
+    float f2 = this->f->func({x2});
 
     // Loop until the tolerance is met or the maximum number of iterations is reached
-    while (std::abs(xMax - xMin) > tol && record.numIters < maxNumIters) {
+    while (std::abs(xMax - xMin) > tol && numIters < maxNumIters) {
         // Update the record
-        record.numIters++;
+        numIters++;
         if (f1 < f2) {
             xMax = x2;
             x2 = x1;
@@ -39,10 +38,13 @@ OptimizerRecord1D Optimizer1D_gss::minimize(float startX, float xMin, float xMax
             f2 = f->func({x2});
         }
     }
+    if (numIters < maxNumIters) {
+        isSuccess = true;
+    }
 
     // Update the record
-    record.x = (xMin + xMax) / 2.0f;
-    record.fx = f->func({record.x});
+    optX = (xMin + xMax) / 2.0f;
+    optVal = f->func({optX});
 
-    return record;
+    return OptimizerRecord1D(optX, optVal, numIters, isSuccess);
 }
