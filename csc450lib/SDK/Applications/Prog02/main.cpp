@@ -58,6 +58,7 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
         }
         b *= 1.1;
         right_height = flight->func(b);
+        cout << b << endl;
     }
 
     return vector<float>{a, b};
