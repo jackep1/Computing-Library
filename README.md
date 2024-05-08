@@ -35,15 +35,21 @@ In addition to the library code, there are a few simple applications that demons
 
 <a id="prog1"></a>
 ### Program 1
-
+The first program is a very simple demonstration of implementing 1-dimensional functions; there are four examples, one [cosine function](csc450lib/SDK/Headers/CosFunc.h), one [sine function](csc450lib/SDK/Headers/SinFunc.h), and two examples of a [polynomial function](csc450lib/SDK/Headers/PolynomialFunction1D.h), which is a subclass of [Function1D](csc450lib/SDK/Headers/Function1D.h). There's a demonstration of their domains, with a few attempts at evaluating them returning the appropriate errors, and then they are evaluated for a sample of inputs, with input/output pairs written to local files for analysis in Mathematica.
 
 <a id="prog2"></a>
 ### Program 2
+The first part of program 2 demonstrates 1-dimensional functions' method for finding the derivative of a function. There are two methods for this, the base class's approximation method, or a subclass's implementation of an exact method. The two methods are compared for time by implementing the same function twice, once [with the exact method](csc450lib/SDK/Headers/CosFunc.h) and once [with the approximation](csc450lib/SDK/Headers/CosFuncNoDerivative.h).  
+The second part of program 2 demonstrates the use of several classes created to find the path a bouncing object takes off of a surface. The [surface class](csc450lib/SDK/Headers/Surface.h) is a 1-dimensional function that has an additional member variable alpha, which represents the surface's elasticity, and an additional method for getting the outgoing velocity of an object after collision. The [ballistic function](csc450lib/SDK/Headers/BallisticFunction.h) class has members for the initial position (x, y) and the initial components of velocity in each direction. It has methods both for getting position and for getting position/velocity at given time t.  
+An instance of the surface class can be combined with an instance of a ballistic function in an instance of the [collision class](csc450lib/SDK/Headers/CollisionProblem.h), which is 1-dimensional function. This function returns the difference between the height of the ballistic object at a given time and the elevation of the surface. This allows the function to be evaluated by a [non-linear solver](csc450lib/SDK/Headers/NonLinearSolver1D.h) to find the point of collision (when the function is zero). This can be repeated to find where a bouncing object lands following consecutive bounces.
 
-
+<!--
 <a id="prog3"></a>
 ### Program 3
 
-
+-->
+<!--
 <a id="prog4"></a>
 ### Program 4
+
+-->
