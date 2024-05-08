@@ -1,5 +1,7 @@
 #include <Function1D.h>
+#include <DomainOfDefinition.h>
 #include <CSC450Exception.h>
+#include <tuple>
 
 using namespace csc450lib;
 using namespace csc450lib_calc;
@@ -12,8 +14,21 @@ using namespace csc450lib_calc;
 */
 Function1D::Function1D(float xmin, float xmax)
 {
+    domain = std::make_shared<DomainOfDefinition>(std::vector<subDomain>{std::make_tuple(xmin, xmax, false, false)});
     lowerBound = xmin;
     upperBound = xmax;
+}
+
+/**
+ * The constructor for the Function1D class that sets a unique domain of definition.
+ * 
+ * @param d the domain of definition
+*/
+Function1D::Function1D(std::shared_ptr<DomainOfDefinition> d)
+{
+    domain = d;
+    lowerBound = std::get<0>(d->domain.front());
+    upperBound = std::get<1>(d->domain.back());
 }
 
 /**

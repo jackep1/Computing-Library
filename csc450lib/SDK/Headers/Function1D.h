@@ -21,7 +21,7 @@ namespace csc450lib_calc {
 			// Public methods for the interface
 			Function1D() = default;
 			Function1D(float xmin, float xmax);
-			// Function1D(std::shared_ptr<DomainOfDefinition> d);  OR
+			Function1D(std::shared_ptr<DomainOfDefinition> d);
 			// Function1D(std::shared_ptr<float> d);
 			virtual float func(float x) const = 0;
 			virtual float dfunc(float x) const;
@@ -38,6 +38,7 @@ namespace csc450lib_calc {
 		private:
 			float lowerBound = std::numeric_limits<float>::infinity() * -1;
 			float upperBound = std::numeric_limits<float>::infinity();
+			std::shared_ptr<DomainOfDefinition> domain;
 	};
 }
 
