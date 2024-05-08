@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
-#include "Function1D.h"
-#include "CSC450Lib.h"
-#include "CosFunc.h"
-#include "SinFunc.h"
-#include "PolynomialFunction1D.h"
+
+#include <Function1D.h>
+#include <CosFunc.h>
+#include <SinFunc.h>
+#include <PolynomialFunction1D.h>
+
+#include <CSC450Lib.h>
 #include <CSC450Exception.h>
 
 using namespace std;

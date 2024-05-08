@@ -1,7 +1,6 @@
 #ifndef DOMAINOFDEFINITION_H
 #define DOMAINOFDEFINITION_H
 
-#include <Function1D.h>
 #include <vector>
 #include <tuple>
 

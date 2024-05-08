@@ -17,7 +17,7 @@ namespace csc450lib_calc {
             Function1DfromND& operator =(const Function1DfromND& obj) = delete;
             Function1DfromND& operator =(Function1DfromND&& obj) = delete;
 
-            Function1DfromND(const FunctionND& fn, const std::vector<float>& x0, const std::vector<float>& uvect);
+            Function1DfromND(std::shared_ptr<FunctionND> fn, const std::vector<float>& x0, const std::vector<float>& uvect);
             float func(float u);
 
             std::shared_ptr<FunctionND> f;

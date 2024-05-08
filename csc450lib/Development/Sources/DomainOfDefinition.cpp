@@ -1,5 +1,7 @@
 #include <DomainOfDefinition.h>
 
+using namespace csc450lib_calc;
+
 /**
  * Constructor for DomainOfDefinition
  * 

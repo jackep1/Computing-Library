@@ -1,6 +1,7 @@
 #ifndef FUNCTION1D_H
 #define FUNCTION1D_H
 
+#include <DomainOfDefinition.h>
 #include <limits>
 #include <memory>
 
