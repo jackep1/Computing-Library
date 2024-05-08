@@ -15,48 +15,9 @@ using namespace csc450lib_calc;
 
 int main(int argc, const char* argv[])
 {
-	// f is a MyFunction1D object
-	// MyFunction1D f;
-	
-	// MyFunction1D* g = new MyFunction1D();
-	// shared_ptr<MyFunction1D> h = make_shared<MyFunction1D>();
-		
-	// polymorphic access
-	// MyFunction1D* k = new MyFunction1D();	
-	// shared_ptr<MyFunction1D> l = make_shared<MyFunction1D>();
-	
-// 	vector<shared_ptr<Function1D> > functionList;
-// 	
-// 	functionList.push_back(make_shared<MyFunction1D>());
-// 	functionList.push_back(make_shared<MyOtherFunction1D>());
-// 	
-// 	functionList.clear();
-
-
-// 	MyFunction1D copyOfF(f);
-// 	MyFunction1D moveOfF(std::move(f));
-// 	MyFunction1D otherCopyOfF = f;
-
-
-	float z = 2.5f;
-	(void) z;
-	(void) (3*z+ 2);
-
 	float inf = INFINITY;
 	float ninf = -INFINITY;
-//		   \______/	
-//			value of 3*z + 2  --> a float
-//	\_______________________/
-//	that value cast to  a char --> no impact on z
-	
-//	(void) g;
-//         ^
-//		   |
-//		value of g   --> a pointer to a MyFunction1D
-//  \______________/
-//	**value of g** (not g) cast as a void ---> no impact on g;
 
-//	(void) k;
 	ofstream cosFile("../../../../MMA Files/cos.txt");
 	ofstream sinFile("../../../../MMA Files/sin.txt");
 	ofstream p1File("../../../../MMA Files/p1.txt");
