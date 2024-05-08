@@ -2,6 +2,7 @@
 #define FUNCTION1DFROMND_H
 
 #include <FunctionND.h>
+#include <memory>
 
 namespace csc450lib_calc {
     /**
@@ -9,8 +10,19 @@ namespace csc450lib_calc {
     */
     class Function1DfromND {
         public:
+            // Don't need copy and move constructors and assignment operators
+            virtual ~Function1DfromND() = default;
+            Function1DfromND(const Function1DfromND& obj) = delete;
+            Function1DfromND(Function1DfromND&& obj) = delete;
+            Function1DfromND& operator =(const Function1DfromND& obj) = delete;
+            Function1DfromND& operator =(Function1DfromND&& obj) = delete;
+
             Function1DfromND(const FunctionND& fn, const std::vector<float>& x0, const std::vector<float>& uvect);
             float func(float u);
+
+            std::shared_ptr<FunctionND> f;
+            std::vector<float> x0;
+            std::vector<float> uvect;
     };
 }
 
