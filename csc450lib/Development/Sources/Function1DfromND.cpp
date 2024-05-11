@@ -5,19 +5,19 @@
 using namespace csc450lib;
 using namespace csc450lib_calc;
 
-Function1DfromND::Function1DfromND(std::shared_ptr<FunctionND> fn, const std::vector<float>& x0, const std::vector<float>& uvect) {
+Function1DfromND::Function1DfromND(std::shared_ptr<FunctionND> fn, const std::vector<float>& x0, const std::vector<float>& uvect)
+: f(fn), x0(x0), uvect(uvect) {
     if (x0.size() != uvect.size() || x0.size() != fn->N) {
         throw CSC450Exception(ErrorCode::UNKNOWN_ERROR, "x0 and uvect must be the same size");
     }
-    this->f = fn;
-    this->x0 = x0;
-    this->uvect = uvect;
 }
 
 float Function1DfromND::func(float u) {
     std::vector<float> x = this->x0;
     for (int i = 0; i < this->x0.size(); i++) {
-        x[i] += u * cosf(u /*fix this, should be theta*/);
+        x[i] += x0[i] + u*uvect[i];
     }
     return this->f->func(x);
 }
+
+

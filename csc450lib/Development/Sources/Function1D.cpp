@@ -13,10 +13,9 @@ using namespace csc450lib_calc;
  * @param xmax the upper bound of the function
 */
 Function1D::Function1D(float xmin, float xmax)
+: lowerBound(xmin), upperBound(xmax)
 {
     domain = std::make_shared<DomainOfDefinition>(std::vector<subDomain>{std::make_tuple(xmin, xmax, false, false)});
-    lowerBound = xmin;
-    upperBound = xmax;
 }
 
 /**
@@ -25,11 +24,7 @@ Function1D::Function1D(float xmin, float xmax)
  * @param d the domain of definition
 */
 Function1D::Function1D(std::shared_ptr<DomainOfDefinition> d)
-{
-    domain = d;
-    lowerBound = std::get<0>(d->domain.front());
-    upperBound = std::get<1>(d->domain.back());
-}
+: lowerBound(std::get<0>(d->get_domain().front())), upperBound(std::get<1>(d->get_domain().back())), domain(d) {}
 
 /**
  * Determines if the function is defined at the given x value.

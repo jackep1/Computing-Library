@@ -21,6 +21,7 @@ namespace csc450lib_calc {
             // Public methods for the interface
             FunctionND(int n);
             virtual float func(const std::vector<float>& x) = 0;
+            virtual std::vector<float> grad(const std::vector<float>& x) const;
 
             // The number of dimensions of the function
             int N;

@@ -22,7 +22,7 @@ class Surface : public csc450lib_calc::Function1D {
             float n1 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * this->dfunc(x);
             float n2 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * 1;
             std::vector<float> normal_force = std::vector<float>{n1, n2};
-            std::vector<float> aN = std::vector<float>{alpha * normal_force[0], alpha * normal_force[1]};
+            std::vector<float> aN = std::vector<float>{a * normal_force[0], a * normal_force[1]};
             std::vector<float> Vout = std::vector<float>{Vinx + aN[0], Viny + aN[1]};
             return std::vector<float>{x, Vout[0], Vout[1]};
         }
@@ -30,11 +30,11 @@ class Surface : public csc450lib_calc::Function1D {
         /**
          * Sets the 'a' or elasticity value of the surface.
         */
-        void setAlpha(float alpha) { this->alpha = alpha; }
+        void setAlpha(float alpha) { this->a = alpha; }
 
-    private:
+    protected:
         // The elasticity value of the surface
-        float alpha;
+        float a;
 };
 
 #endif // SURFACE_H

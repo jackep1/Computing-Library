@@ -2,13 +2,14 @@
 #define FUNCTION1DFROMND_H
 
 #include <FunctionND.h>
+#include <Function1D.h>
 #include <memory>
 
 namespace csc450lib_calc {
     /**
      * A class which represents a function of one variable that is derived from a function of N variables.
     */
-    class Function1DfromND {
+    class Function1DfromND : public Function1D {
         public:
             // Don't need copy and move constructors and assignment operators
             virtual ~Function1DfromND() = default;

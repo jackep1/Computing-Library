@@ -30,7 +30,10 @@ namespace csc450lib_calc {
             DomainOfDefinition unionWith(const DomainOfDefinition& other) const;
             bool contains_subdomain(const DomainOfDefinition& other) const;
             bool contains_point(float x) const;
+
+            std::vector<subDomain> get_domain();
             
+        private:
             std::vector<subDomain> domain;
     };
 }

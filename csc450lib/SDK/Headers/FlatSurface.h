@@ -13,6 +13,8 @@ class FlatSurface : public Surface {
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;
         std::shared_ptr<std::string> getExpressionMMA() const;
+    protected:
+        float a;
 };
 
 #endif // FLATSURFACE_H

@@ -36,7 +36,7 @@ namespace csc450lib_calc {
 			virtual bool derivativeIsExact() const = 0;
 			virtual bool secondDerivativeIsExact() const = 0;
 		
-		private:
+		protected:
 			float lowerBound = std::numeric_limits<float>::infinity() * -1;
 			float upperBound = std::numeric_limits<float>::infinity();
 			std::shared_ptr<DomainOfDefinition> domain;

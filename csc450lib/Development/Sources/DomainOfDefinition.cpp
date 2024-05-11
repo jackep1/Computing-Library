@@ -7,9 +7,8 @@ using namespace csc450lib_calc;
  * 
  * @param domain the domain
 */
-DomainOfDefinition::DomainOfDefinition(std::vector<subDomain> domain) {
-    this->domain = domain;
-}
+DomainOfDefinition::DomainOfDefinition(std::vector<subDomain> domain)
+: domain(domain) {};
 
 /**
  * Operates on this domain and another domain to find the intersection of the two.
@@ -105,4 +104,13 @@ bool DomainOfDefinition::contains_point(float x) const {
         }
     }
     return true;
+}
+
+/**
+ * Gets the domain of definition.
+ * 
+ * @return the domain of definition
+*/
+std::vector<subDomain> DomainOfDefinition::get_domain() {
+    return this->domain;
 }

@@ -1,3 +1,4 @@
+#include <Surface.h>
 #include <FlatSurface.h>
 #include <CSC450Exception.h>
 
@@ -7,7 +8,7 @@
  * @param alpha the alpha value
 */
 FlatSurface::FlatSurface(float alpha) {
-    alpha = alpha;
+    this->a = alpha;
 }
 
 /**

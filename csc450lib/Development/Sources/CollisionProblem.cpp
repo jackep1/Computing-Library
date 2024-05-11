@@ -8,10 +8,8 @@
  * @param surface the surface
  * @return a CollisionProblem object
 */
-CollisionProblem::CollisionProblem(BallisticFunction* ballistic, Surface* surface) {
-    this->ballistic = ballistic;
-    this->surface = surface;
-}
+CollisionProblem::CollisionProblem(BallisticFunction* ballistic, Surface* surface)
+: ballistic(ballistic), surface(surface) {}
 
 /**
  * Gets the object's height above the surface at time t.

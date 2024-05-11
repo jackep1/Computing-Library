@@ -10,12 +10,8 @@
  * @param Vx0 the initial x velocity
  * @param Vy0 the initial y velocity
 */
-BallisticFunction::BallisticFunction(float x0, float y0, float Vx0, float Vy0) {
-    this->x0 = x0;
-    this->y0 = y0;
-    this->Vx0 = Vx0;
-    this->Vy0 = Vy0;
-}
+BallisticFunction::BallisticFunction(float x0, float y0, float Vx0, float Vy0)
+: x0(x0), y0(y0), Vx0(Vx0), Vy0(Vy0) {}
 
 /**
  * Gets the position of the object at time t.

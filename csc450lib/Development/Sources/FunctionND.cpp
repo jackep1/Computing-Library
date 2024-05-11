@@ -8,6 +8,4 @@ using namespace csc450lib_calc;
  * 
  * @param n the number of dimensions
 */
-FunctionND::FunctionND(int n) {
-    this->N = n;
-}
+FunctionND::FunctionND(int n) : N(n) {}
