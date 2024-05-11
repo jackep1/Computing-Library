@@ -23,6 +23,7 @@ namespace csc450lib_calc {
             virtual float func(const std::vector<float>& x) = 0;
             virtual std::vector<float> grad(const std::vector<float>& x) const;
 
+        protected:
             // The number of dimensions of the function
             int N;
    };
