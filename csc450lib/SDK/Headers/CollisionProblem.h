@@ -1,24 +1,26 @@
-#ifndef COLLISIONPROBLEM_H
-#define COLLISIONPROBLEM_H
-
-#include <Function1D.h>
 #include <BallisticFunction.h>
 #include <Surface.h>
 
-class CollisionProblem : public csc450lib_calc::Function1D {
-    public:
-        // Public methods for the interface
-        CollisionProblem(BallisticFunction* ballistic, Surface* surface);
-        float func(float t) const;
+namespace csc450lib_calc {
 
-        // Some methods that are useless but must be defined
-        bool derivativeIsExact() const { return false; }
-        bool secondDerivativeIsExact() const { return false; }
-        std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
+    #ifndef COLLISIONPROBLEM_H
+    #define COLLISIONPROBLEM_H
 
-    protected:
-        BallisticFunction* ballistic;
-        Surface* surface;
-};
+    class CollisionProblem : public Function1D {
+        public:
+            // Public methods for the interface
+            CollisionProblem(BallisticFunction* ballistic, Surface* surface);
+            float func(float t) const;
 
-#endif // COLLISIONPROBLEM_H
+            // Some methods that are useless but must be defined
+            bool derivativeIsExact() const { return false; }
+            bool secondDerivativeIsExact() const { return false; }
+            std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
+
+        protected:
+            BallisticFunction* ballistic;
+            Surface* surface;
+    };
+
+    #endif // COLLISIONPROBLEM_H
+}

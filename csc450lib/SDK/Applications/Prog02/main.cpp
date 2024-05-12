@@ -6,19 +6,17 @@
 #include <CSC450Exception.h>
 
 #include <Function1D.h>
-#include <CosFunc.h>
-#include <CosFuncNoDerivative.h>
-#include <PolynomialFunction1D.h>
+#include <ExampleFunc1D.h>
 
-#include <FlatSurface.h>
-#include <EasySurface.h>
-#include <HardSurface.h>
+#include <Surface.h>
 #include <BallisticFunction.h>
 #include <CollisionProblem.h>
 
-#include <NonLinearSolver1D_bisection.h>
+#include <NonLinearSolver1D.h>
 
 using namespace std;
+using namespace csc450lib;
+using namespace csc450lib_calc;
 
 /**
  * Find the search bracket for the location of the collision. Left bracket is
@@ -197,7 +195,7 @@ int main(int argc, const char* argv[])
 
         // Find the exact time of collision
         NonLinearSolverRecord1D bounce = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight), search_bracket[0], search_bracket[1], 100, 0.01);
-        if (!bounce.isSuccess) {
+        if (!bounce.getIsSuccess()) {
             cout << "Bisection failed to find bounce location" << endl;
             exit(1);
         }
@@ -205,7 +203,7 @@ int main(int argc, const char* argv[])
 
         // Use the ballistic function info and bounce location to
         // find 10 points along the trajectory of the projectile
-        float time_interval = bounce.valStar / 10;
+        float time_interval = bounce.getValStar() / 10;
         for (int j = 0; j < 10; j++) {
             trajectory.push_back(ballistic1.getPosition(time_interval));
         }
@@ -219,7 +217,7 @@ int main(int argc, const char* argv[])
         // Use the bounce information to define a new ballistic function
         // where the projectile is launched from the bounce location with
         // new position and velocity info
-        vector<float> in_info = ballistic1.getPositionAndVelocity(bounce.valStar);
+        vector<float> in_info = ballistic1.getPositionAndVelocity(bounce.getValStar());
         vector<float> out_info = flat_elastic_surface.getOutgoingVelocity(in_info[0], in_info[2], in_info[3]);
 
         // Set the new ballistic function

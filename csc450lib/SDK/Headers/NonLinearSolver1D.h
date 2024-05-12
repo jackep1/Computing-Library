@@ -1,9 +1,9 @@
 #include <Function1D.h>
 
-#ifndef NONLINEARSOLVERRECORD1D_H
-#define NONLINEARSOLVERRECORD1D_H
-
 namespace csc450lib_calc {
+    
+    #ifndef NONLINEARSOLVERRECORD1D_H
+    #define NONLINEARSOLVERRECORD1D_H
 
     class NonLinearSolverRecord1D {
 
@@ -22,6 +22,11 @@ namespace csc450lib_calc {
                 this->numIter = numIter;
                 this->isSuccess = isSuccess;
             }
+            // Getters
+            float getXStar() const { return xStar; }
+            float getValStar() const { return valStar; }
+            int getNumIter() const { return numIter; }
+            bool getIsSuccess() const { return isSuccess; }
 
         protected:
             // The value of x that solves the equation
@@ -33,16 +38,13 @@ namespace csc450lib_calc {
             // Whether the solution was successful
             bool isSuccess;
     };
-}
 
-#endif // NONLINEARSOLVERRECORD1D_H
-
+    #endif // NONLINEARSOLVERRECORD1D_H
 
 
-#ifndef NONLINEARSOLVER1D_H
-#define NONLINEARSOLVER1D_H
 
-namespace csc450lib_calc {
+    #ifndef NONLINEARSOLVER1D_H
+    #define NONLINEARSOLVER1D_H
 
     class NonLinearSolver1D {
 
@@ -58,43 +60,43 @@ namespace csc450lib_calc {
             NonLinearSolver1D() = default;
             virtual NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> f, float a, float b, int n, float tol) const = 0;
     };
+
+    #endif // NONLINEARSOLVER1D_H
+
+
+
+    #ifndef NONLINEARSOLVER1D_BISECTION_H
+    #define NONLINEARSOLVER1D_BISECTION_H
+
+    class NonLinearSolver1D_bisection : public csc450lib_calc::NonLinearSolver1D {
+
+        public:
+            csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol) const;
+    };
+
+    #endif // NONLINEARSOLVER1D_BISECTION_H
+
+
+
+    #ifndef NONLINEARSOLVER1D_NEWTONRAPHSON_H
+    #define NONLINEARSOLVER1D_NEWTONRAPHSON_H
+
+    class NonLinearSolver1D_NewtonRaphson : public csc450lib_calc::NonLinearSolver1D {
+        public:
+            csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol);
+    };
+
+    #endif // NONLINEARSOLVER1D_NEWTONRAPHSON_H
+
+
+
+    #ifndef NONLINEARSOLVER1D_SECANT_H
+    #define NONLINEARSOLVER1D_SECANT_H
+
+    class NonLinearSolver1D_secant : public csc450lib_calc::NonLinearSolver1D {
+        public:
+            csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol);
+    };
+
+    #endif // NONLINEARSOLVER1D_SECANT_H
 }
-
-#endif // NONLINEARSOLVER1D_H
-
-
-
-#ifndef NONLINEARSOLVER1D_BISECTION_H
-#define NONLINEARSOLVER1D_BISECTION_H
-
-class NonLinearSolver1D_bisection : public csc450lib_calc::NonLinearSolver1D {
-
-    public:
-        csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol) const;
-};
-
-#endif // NONLINEARSOLVER1D_BISECTION_H
-
-
-
-#ifndef NONLINEARSOLVER1D_NEWTONRAPHSON_H
-#define NONLINEARSOLVER1D_NEWTONRAPHSON_H
-
-class NonLinearSolver1D_NewtonRaphson : public csc450lib_calc::NonLinearSolver1D {
-    public:
-        csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol);
-};
-
-#endif // NONLINEARSOLVER1D_NEWTONRAPHSON_H
-
-
-
-#ifndef NONLINEARSOLVER1D_SECANT_H
-#define NONLINEARSOLVER1D_SECANT_H
-
-class NonLinearSolver1D_secant : public csc450lib_calc::NonLinearSolver1D {
-    public:
-        csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol);
-};
-
-#endif // NONLINEARSOLVER1D_SECANT_H

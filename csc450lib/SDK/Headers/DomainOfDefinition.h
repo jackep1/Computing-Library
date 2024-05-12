@@ -1,6 +1,3 @@
-#ifndef DOMAINOFDEFINITION_H
-#define DOMAINOFDEFINITION_H
-
 #include <vector>
 
 namespace csc450lib_calc {
@@ -20,6 +17,9 @@ namespace csc450lib_calc {
         subDomain(float xMin, float xMax, bool inclMin, bool inclMax)
         : xMin(xMin), xMax(xMax), inclMin(inclMin), inclMax(inclMax) {};
     };
+
+    #ifndef DOMAINOFDEFINITION_H
+    #define DOMAINOFDEFINITION_H
 
     class DomainOfDefinition {
         
@@ -43,6 +43,6 @@ namespace csc450lib_calc {
         protected:
             std::vector<subDomain> domain;
     };
-}
 
-#endif /// DOMAINOFDEFINITION_H
+    #endif /// DOMAINOFDEFINITION_H
+}

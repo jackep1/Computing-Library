@@ -2,9 +2,7 @@
 #include <fstream>
 
 #include <Function1D.h>
-#include <CosFunc.h>
-#include <SinFunc.h>
-#include <PolynomialFunction1D.h>
+#include <ExampleFunc1D.h>
 
 #include <CSC450Lib.h>
 #include <CSC450Exception.h>

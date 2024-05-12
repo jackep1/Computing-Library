@@ -1,12 +1,12 @@
-#ifndef VECTORFUNCTION1D_H
-#define VECTORFUNCTION1D_H
-
 #include <DomainOfDefinition.h>
 #include <Function1D.h>
 #include <limits>
 #include <memory>
 
 namespace csc450lib_calc {
+
+    #ifndef VECTORFUNCTION1D_H
+    #define VECTORFUNCTION1D_H
 
     class VectorFunction1D {
 
@@ -37,6 +37,6 @@ namespace csc450lib_calc {
         protected:
             DomainOfDefinition domain;
     };
-}
 
-#endif /// VECTORFUNCTION1D_H
+    #endif /// VECTORFUNCTION1D_H
+}

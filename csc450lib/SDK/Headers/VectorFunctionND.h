@@ -1,7 +1,9 @@
-#ifndef VECTORFUNCTIONND_H
-#define VECTORFUNCTIONND_H
+#include <vector>
 
 namespace csc450lib_calc {
+
+    #ifndef VECTORFUNCTIONND_H
+    #define VECTORFUNCTIONND_H
 
     class VectorFunctionND {
 
@@ -23,6 +25,6 @@ namespace csc450lib_calc {
             // The number of dimensions of the function
             int N;
     };
-}
 
-#endif /// VECTORFUNCTIONND_H
+    #endif /// VECTORFUNCTIONND_H
+}

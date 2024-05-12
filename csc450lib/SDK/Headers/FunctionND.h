@@ -1,9 +1,10 @@
-#ifndef FUNCTIONND_H
-#define FUNCTIONND_H
-
 #include <vector>
 
 namespace csc450lib_calc {
+
+    #ifndef FUNCTIONND_H
+    #define FUNCTIONND_H
+
     /**
      * The FunctionND class is an abstract class that represents a function of n variables.
     */
@@ -26,8 +27,7 @@ namespace csc450lib_calc {
         protected:
             // The number of dimensions of the function
             int N;
-   };
+    };
+
+    #endif /// FUNCTIONND_H
 }
-
-
-#endif /// FUNCTIONND_H
