@@ -1,14 +1,19 @@
 #include <DomainOfDefinition.h>
+#include <limits>
+#include <algorithm>
 
 using namespace csc450lib_calc;
+
+DomainOfDefinition::DomainOfDefinition()
+: domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}) {};
 
 /**
  * Constructor for DomainOfDefinition
  * 
  * @param domain the domain
 */
-DomainOfDefinition::DomainOfDefinition(std::vector<subDomain> domain)
-: domain(domain) {};
+DomainOfDefinition::DomainOfDefinition(std::vector<subDomain> domains)
+: domain(domains) {};
 
 /**
  * Operates on this domain and another domain to find the intersection of the two.
@@ -18,14 +23,16 @@ DomainOfDefinition::DomainOfDefinition(std::vector<subDomain> domain)
 */
 DomainOfDefinition DomainOfDefinition::intersection(const DomainOfDefinition& other) const {
     std::vector<subDomain> newDomain;
-    for (int i = 0; i < this->domain.size(); i++) {
-        for (int j = 0; j < other.domain.size(); j++) {
-            float x1 = std::max(std::get<0>(this->domain[i]), std::get<0>(other.domain[j]));
-            float x2 = std::min(std::get<1>(this->domain[i]), std::get<1>(other.domain[j]));
-            bool incl1 = std::get<2>(this->domain[i]) && std::get<2>(other.domain[j]);
-            bool incl2 = std::get<3>(this->domain[i]) && std::get<3>(other.domain[j]);
-            if (x1 < x2) {
-                newDomain.push_back(std::make_tuple(x1, x2, incl1, incl2));
+    for (auto& subdomain : this->domain) {
+        for (auto& othersubdomain : other.domain) {
+            float xMin = std::max(subdomain.xMin, othersubdomain.xMin);
+            bool inclMin = (subdomain.xMin < othersubdomain.xMin) ? othersubdomain.inclMin : subdomain.inclMin;
+
+            float xMax = std::min(subdomain.xMax, othersubdomain.xMax);
+            bool inclMax = (subdomain.xMax > othersubdomain.xMax) ? subdomain.inclMax : othersubdomain.inclMax;
+
+            if (xMin < xMax || xMin == xMax && inclMin && inclMax) {
+                newDomain.push_back(subDomain{xMin, xMax, inclMin, inclMax});
             }
         }
     }
@@ -41,23 +48,22 @@ DomainOfDefinition DomainOfDefinition::intersection(const DomainOfDefinition& ot
 */
 DomainOfDefinition DomainOfDefinition::unionWith(const DomainOfDefinition& other) const {
     std::vector<subDomain> newDomain;
-    for (int i = 0; i < this->domain.size(); i++) {
-        newDomain.push_back(this->domain[i]);
-    }
-    for (int i = 0; i < other.domain.size(); i++) {
-        bool found = false;
-        for (int j = 0; j < this->domain.size(); j++) {
-            float x1 = std::max(std::get<0>(this->domain[j]), std::get<0>(other.domain[i]));
-            float x2 = std::min(std::get<1>(this->domain[j]), std::get<1>(other.domain[i]));
-            bool incl1 = std::get<2>(this->domain[j]) && std::get<2>(other.domain[i]);
-            bool incl2 = std::get<3>(this->domain[j]) && std::get<3>(other.domain[i]);
-            if (x1 < x2) {
-                newDomain[j] = std::make_tuple(x1, x2, incl1, incl2);
-                found = true;
-            }
-        }
-        if (!found) {
-            newDomain.push_back(other.domain[i]);
+    std::vector<subDomain> combined = this->domain;
+
+    combined.insert(combined.end(), other.domain.begin(), other.domain.end());
+
+    std::sort(combined.begin(), combined.end(),
+        [](const subDomain& a, const subDomain& b) {
+            return a.xMin < b.xMin;
+        });
+
+    for (const auto& subdomain : combined) {
+        if (newDomain.empty() || subdomain.xMin > newDomain.back().xMax ||
+            (subdomain.xMin == newDomain.back().xMax && (!subdomain.inclMin && !newDomain.back().inclMax))) {
+            newDomain.push_back(subdomain);
+        } else {
+            newDomain.back().xMax = std::max(newDomain.back().xMax, subdomain.xMax);
+            newDomain.back().inclMax = (newDomain.back().xMax == subdomain.xMax) ? subdomain.inclMax || newDomain.back().inclMax : true;
         }
     }
     return DomainOfDefinition(newDomain);
@@ -70,13 +76,11 @@ DomainOfDefinition DomainOfDefinition::unionWith(const DomainOfDefinition& other
  * @return whether this domain contains the other domain
 */
 bool DomainOfDefinition::contains_subdomain(const DomainOfDefinition& other) const {
-    for (int i = 0; i < other.domain.size(); i++) {
+    for (const auto& othersubdomain : other.domain) {
         bool found = false;
-        for (int j = 0; j < this->domain.size(); j++) {
-            if (std::get<0>(this->domain[j]) <= std::get<0>(other.domain[i]) &&
-                std::get<1>(this->domain[j]) >= std::get<1>(other.domain[i]) &&
-                std::get<2>(this->domain[j]) == std::get<2>(other.domain[i]) &&
-                std::get<3>(this->domain[j]) == std::get<3>(other.domain[i])) {
+        for (const auto& subdomain : this->domain) {
+            if ((subdomain.xMin < othersubdomain.xMin || (subdomain.xMin == othersubdomain.xMin && subdomain.inclMin == othersubdomain.inclMin)) &&
+                (subdomain.xMax > othersubdomain.xMax || (subdomain.xMax == othersubdomain.xMax && subdomain.inclMax == othersubdomain.inclMax))) {
                 found = true;
                 break;
             }
@@ -95,15 +99,13 @@ bool DomainOfDefinition::contains_subdomain(const DomainOfDefinition& other) con
  * @return whether this domain contains the point
 */
 bool DomainOfDefinition::contains_point(float x) const {
-    for (int i = 0; i < this->domain.size(); i++) {
-        if ((std::get<2>(this->domain[i]) && x < std::get<0>(this->domain[i])) ||
-            (std::get<3>(this->domain[i]) && x > std::get<1>(this->domain[i])) ||
-            (!std::get<2>(this->domain[i]) && x <= std::get<0>(this->domain[i])) ||
-            (!std::get<3>(this->domain[i]) && x >= std::get<1>(this->domain[i]))) {
-            return false;
+    for (const auto& subdomain : this->domain) {
+        if ((x > subdomain.xMin || (x == subdomain.xMin && subdomain.inclMin)) &&
+            (x < subdomain.xMax || (x == subdomain.xMax && subdomain.inclMax))) {
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 /**
@@ -111,6 +113,6 @@ bool DomainOfDefinition::contains_point(float x) const {
  * 
  * @return the domain of definition
 */
-std::vector<subDomain> DomainOfDefinition::get_domain() {
+std::vector<subDomain> DomainOfDefinition::get_domain() const {
     return this->domain;
 }

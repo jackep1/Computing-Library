@@ -1,36 +1,19 @@
-#ifndef SURFACE_H
-#define SURFACE_H
-
 #include <Function1D.h>
 #include <cmath>
 #include <vector>
+
+#ifndef SURFACE_H
+#define SURFACE_H
 
 /**
  * Represents a surface in a collision problem.
 */
 class Surface : public csc450lib_calc::Function1D {
-    public:
-        /**
-         * Gets the outgoing velocity of the object after a collision with the surface.
-         * 
-         * @param x the x position of the object
-         * @param Vinx the x velocity of the object
-         * @param Viny the y velocity of the object
-         * @return a vector containing {x, Voutx, Vouty} of the object after the collision
-        */
-        std::vector<float> getOutgoingVelocity(float x, float Vinx, float Viny) const {
-            float n1 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * this->dfunc(x);
-            float n2 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * 1;
-            std::vector<float> normal_force = std::vector<float>{n1, n2};
-            std::vector<float> aN = std::vector<float>{a * normal_force[0], a * normal_force[1]};
-            std::vector<float> Vout = std::vector<float>{Vinx + aN[0], Viny + aN[1]};
-            return std::vector<float>{x, Vout[0], Vout[1]};
-        }
 
-        /**
-         * Sets the 'a' or elasticity value of the surface.
-        */
-        void setAlpha(float alpha) { this->a = alpha; }
+    public:
+        Surface(float alpha);
+        std::vector<float> getOutgoingVelocity(float x, float Vinx, float Viny) const;
+        void setAlpha(float alpha);
 
     protected:
         // The elasticity value of the surface
@@ -38,3 +21,63 @@ class Surface : public csc450lib_calc::Function1D {
 };
 
 #endif // SURFACE_H
+
+
+
+#ifndef FLATSURFACE_H
+#define FLATSURFACE_H
+
+/**
+ * The FlatSurface class represents a flat surface at y = 1.
+*/
+class FlatSurface : public Surface {
+    
+    public:
+        FlatSurface(float alpha);
+        float func(float x) const;
+        bool derivativeIsExact() const;
+        bool secondDerivativeIsExact() const;
+        std::shared_ptr<std::string> getExpressionMMA() const;
+};
+
+#endif // FLATSURFACE_H
+
+
+
+#ifndef EASYSURFACE_H
+#define EASYSURFACE_H
+
+/**
+ * The EasySurface class represents a surface defined
+ * by the function f(x) = cos(x)/5 + 1.
+*/
+class EasySurface : public Surface {
+    public:
+        EasySurface(float alpha);
+        float func(float x) const;
+        bool derivativeIsExact() const;
+        bool secondDerivativeIsExact() const;
+        std::shared_ptr<std::string> getExpressionMMA() const;
+};
+
+#endif // EASYSURFACE_H
+
+
+
+#ifndef HARDSURFACE_H
+#define HARDSURFACE_H
+
+/**
+ * The HardSurface class represents a surface defined
+ * by the function f(x) = 4sin(x) + 5cos(x/2) + (x^3)/10000.
+*/
+class HardSurface : public Surface {
+    public:
+        HardSurface(float alpha);
+        float func(float x) const;
+        bool derivativeIsExact() const;
+        bool secondDerivativeIsExact() const;
+        std::shared_ptr<std::string> getExpressionMMA() const;
+};
+
+#endif // HARDSURFACE_H

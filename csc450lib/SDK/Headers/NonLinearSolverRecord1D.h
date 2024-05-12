@@ -13,12 +13,6 @@ namespace csc450lib_calc {
             NonLinearSolverRecord1D& operator =(const NonLinearSolverRecord1D& obj) = delete;
             NonLinearSolverRecord1D& operator =(NonLinearSolverRecord1D&& obj) = delete;
 
-            // Public variables
-            float xStar;
-            float valStar;
-            int numIter;
-            bool isSuccess;
-
             // Constructor
             NonLinearSolverRecord1D(float xStar, float valStar, int numIter, bool isSuccess) {
                 this->xStar = xStar;
@@ -26,6 +20,16 @@ namespace csc450lib_calc {
                 this->numIter = numIter;
                 this->isSuccess = isSuccess;
             }
+
+        protected:
+            // The value of x that solves the equation
+            float xStar;
+            // The value of the function at xStar
+            float valStar;
+            // The number of iterations it took to solve the equation
+            int numIter;
+            // Whether the solution was successful
+            bool isSuccess;
     };
 }
 

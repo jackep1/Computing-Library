@@ -8,7 +8,7 @@
 
 namespace csc450lib_calc {
 
-    class VectorFunction1D : public csc450lib_calc::Function1D {
+    class VectorFunction1D {
 
         public:
             // Don't need copy and move constructors and assignment operators
@@ -35,9 +35,7 @@ namespace csc450lib_calc {
             virtual bool secondDerivativeIsExact() const = 0;
 
         protected:
-            float lowerBound = std::numeric_limits<float>::infinity() * -1;
-            float upperBound = std::numeric_limits<float>::infinity();
-            std::shared_ptr<DomainOfDefinition> domain;
+            DomainOfDefinition domain;
     };
 }
 

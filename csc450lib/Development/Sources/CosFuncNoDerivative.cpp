@@ -5,11 +5,6 @@
 using namespace csc450lib;
 
 /**
- * The default constructor for the CosFuncNoDerivative class.
-*/
-CosFuncNoDerivative::CosFuncNoDerivative() {}
-
-/**
  * The constructor for the CosFuncNoDerivative class that sets the lower and upper bounds of the function.
  * 
  * @param lowerBound the lower bound of the function
@@ -27,7 +22,7 @@ CosFuncNoDerivative::CosFuncNoDerivative(float lowerBound, float upperBound) : F
 */
 float CosFuncNoDerivative::func(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     float solution = cosf(0.01*x*x + 1.f) / x;

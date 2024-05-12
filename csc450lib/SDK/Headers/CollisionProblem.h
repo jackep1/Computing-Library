@@ -16,7 +16,7 @@ class CollisionProblem : public csc450lib_calc::Function1D {
         bool secondDerivativeIsExact() const { return false; }
         std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
 
-    private:
+    protected:
         BallisticFunction* ballistic;
         Surface* surface;
 };

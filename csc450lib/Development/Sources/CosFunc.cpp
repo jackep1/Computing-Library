@@ -5,11 +5,6 @@
 using namespace csc450lib;
 
 /**
- * The default constructor for the CosFunc class.
-*/
-CosFunc::CosFunc() {}
-
-/**
  * The constructor for the CosFunc class that sets the lower and upper bounds of the function.
  * 
  * @param lowerBound the lower bound of the function
@@ -30,7 +25,7 @@ CosFunc::CosFunc(float lowerBound, float upperBound) : Function1D(lowerBound, up
 */
 float CosFunc::func(float x) const
 {
-	if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+	if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
 	float solution = cosf(0.01*x*x + 1.f) / x;
@@ -48,7 +43,7 @@ float CosFunc::func(float x) const
 */
 float CosFunc::dfunc(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     float solution = ( (-0.02 * x * x * sinf(0.01 * x * x + 1.f)) - cosf(0.01f * x * x + 1.f) )
@@ -67,7 +62,7 @@ float CosFunc::dfunc(float x) const
 */
 float CosFunc::d2func(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     float solution = (0.0004 *

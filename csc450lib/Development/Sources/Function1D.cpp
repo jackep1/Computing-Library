@@ -1,10 +1,15 @@
 #include <Function1D.h>
 #include <DomainOfDefinition.h>
 #include <CSC450Exception.h>
-#include <tuple>
 
 using namespace csc450lib;
 using namespace csc450lib_calc;
+
+/**
+ * The default constructor for the Function1D class that sets the domain of definition to be all real numbers.
+*/
+Function1D::Function1D()
+: domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}){}
 
 /**
  * The constructor for the Function1D class that sets the lower and upper bounds of the function.
@@ -13,18 +18,15 @@ using namespace csc450lib_calc;
  * @param xmax the upper bound of the function
 */
 Function1D::Function1D(float xmin, float xmax)
-: lowerBound(xmin), upperBound(xmax)
-{
-    domain = std::make_shared<DomainOfDefinition>(std::vector<subDomain>{std::make_tuple(xmin, xmax, false, false)});
-}
+: domain({subDomain(xmin, xmax, false, false)}) {}
 
 /**
  * The constructor for the Function1D class that sets a unique domain of definition.
  * 
  * @param d the domain of definition
 */
-Function1D::Function1D(std::shared_ptr<DomainOfDefinition> d)
-: lowerBound(std::get<0>(d->get_domain().front())), upperBound(std::get<1>(d->get_domain().back())), domain(d) {}
+Function1D::Function1D(DomainOfDefinition d)
+: domain(d) {}
 
 /**
  * Determines if the function is defined at the given x value.
@@ -35,7 +37,10 @@ Function1D::Function1D(std::shared_ptr<DomainOfDefinition> d)
 */
 bool Function1D::isDefinedAt(float x) const
 {
-    return (x > lowerBound) && (x < upperBound);
+    if (domain.contains_point(x)) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -45,7 +50,7 @@ bool Function1D::isDefinedAt(float x) const
 */
 float Function1D::getLowerBound(void) const
 {
-    return lowerBound;
+    return domain.get_domain()[0].xMin;
 }
 
 /**
@@ -55,7 +60,17 @@ float Function1D::getLowerBound(void) const
 */
 float Function1D::getUpperBound(void) const
 {
-    return upperBound;
+    return domain.get_domain()[domain.get_domain().size() - 1].xMax;
+}
+
+/**
+ * Sets the domain of definition of the function.
+ * 
+ * @param d the new domain of definition
+*/
+void Function1D::setDomain(DomainOfDefinition d)
+{
+    domain = d;
 }
 
 /**
@@ -68,7 +83,7 @@ float Function1D::getUpperBound(void) const
 */
 float Function1D::dfunc(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x not in domain");
     }
     float h = x * 0.001;
@@ -90,7 +105,7 @@ float Function1D::dfunc(float x) const
 */
 float Function1D::d2func(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x not in domain");
     }
     float h = x * 0.001;

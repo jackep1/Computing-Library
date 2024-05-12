@@ -27,7 +27,7 @@ SinFunc::SinFunc(float lowerBound, float upperBound) : Function1D(lowerBound, up
 */
 float SinFunc::func(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x not in domain");
     }
     float solution = sin(0.005 * x * x) / (exp(x) - exp(1)*x);
@@ -45,7 +45,7 @@ float SinFunc::func(float x) const
 */
 float SinFunc::dfunc(float x) const
 {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x not in domain");
     }
     float numerator = (0.01 * exp(x) * x * cos(0.005 * x * x)) - ((exp(1)/100) * x * x * cos(0.005 * x * x)) - (exp(x) * sin(0.005 * x * x)) + (exp(1) * sin(0.005 * x * x));

@@ -13,12 +13,6 @@ namespace csc450lib_calc {
             OptimizerRecord1D& operator =(const OptimizerRecord1D& obj) = delete;
             OptimizerRecord1D& operator =(OptimizerRecord1D&& obj) = delete;
 
-            // Public variables
-            float optX;
-            float optVal;
-            int numIters;
-            bool isSuccess;
-
             // Constructor
             OptimizerRecord1D(float optX, float optVal, int numIters, bool isSuccess) {
                 this->optX = optX;
@@ -26,6 +20,16 @@ namespace csc450lib_calc {
                 this->numIters = numIters;
                 this->isSuccess = isSuccess;
             }
+
+        protected:
+            // The value of x that minimizes the function
+            float optX;
+            // The value of the function at optX
+            float optVal;
+            // The number of iterations it took to minimize the function
+            int numIters;
+            // Whether the minimization was successful
+            bool isSuccess;
     };
 }
 

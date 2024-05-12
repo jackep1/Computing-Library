@@ -20,9 +20,9 @@ namespace csc450lib_calc {
 			Function1D& operator =(Function1D&& obj) = delete;
 		
 			// Public methods for the interface
-			Function1D() = default;
+			Function1D();
 			Function1D(float xmin, float xmax);
-			Function1D(std::shared_ptr<DomainOfDefinition> d);
+			Function1D(DomainOfDefinition d);
 			virtual float func(float x) const = 0;
 			virtual float dfunc(float x) const;
 			virtual float d2func(float x) const;
@@ -32,13 +32,12 @@ namespace csc450lib_calc {
 			bool isDefinedAt(float x) const;
 			float getLowerBound(void) const;
 			float getUpperBound(void) const;
+			void setDomain(DomainOfDefinition d);
 			virtual bool derivativeIsExact() const = 0;
 			virtual bool secondDerivativeIsExact() const = 0;
 		
 		protected:
-			float lowerBound = std::numeric_limits<float>::infinity() * -1;
-			float upperBound = std::numeric_limits<float>::infinity();
-			std::shared_ptr<DomainOfDefinition> domain;
+			DomainOfDefinition domain;
 	};
 }
 

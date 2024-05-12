@@ -11,7 +11,7 @@ class BallisticFunction {
         std::vector<float> getPosition(float t) const;
         std::vector<float> getPositionAndVelocity(float t) const;
 
-    private:
+    protected:
         // The initial x position
         float x0;
         // The initial y position

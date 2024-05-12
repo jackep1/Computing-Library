@@ -15,7 +15,7 @@ using namespace csc450lib;
  * @throws CSC450Exception if the function is undefined at x
 */
 float PolynomialFunction1D::func(float x) const {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     float solution = 0;
@@ -50,7 +50,7 @@ PolynomialFunction1D PolynomialFunction1D::derivativeFunc(const PolynomialFuncti
  * @return the value of the first derivative at x
 */
 float PolynomialFunction1D::dfunc(float x) const {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     PolynomialFunction1D derivativeFunc = this->derivativeFunc(*this);
@@ -64,7 +64,7 @@ float PolynomialFunction1D::dfunc(float x) const {
  * @return the value of the second derivative at x
 */
 float PolynomialFunction1D::d2func(float x) const {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     PolynomialFunction1D derivativeFunc = this->derivativeFunc(*this);
@@ -84,7 +84,7 @@ float PolynomialFunction1D::d2func(float x) const {
  * @throws CSC450Exception if the function is undefined at x
 */
 float PolynomialFunction1D::funcHorner(float x) const {
-    if (x <= this->getLowerBound() || x >= this->getUpperBound()) {
+    if (!this->isDefinedAt(x)) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x is not in domain");
     }
     float solution = 0;
@@ -153,8 +153,6 @@ PolynomialFunction1D::PolynomialFunction1D(std::vector<float> a, float lowerBoun
     for (int i = 0; i < a.size(); i++) {
         coefficients.push_back(a[i]);
     }
-    lowerBound = lowerBound;
-    upperBound = upperBound;
 }
 
 /**
