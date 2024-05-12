@@ -8,6 +8,10 @@ namespace csc450lib_calc {
     #ifndef VECTORFUNCTION1D_H
     #define VECTORFUNCTION1D_H
 
+    /**
+     * An abstract class that represents a function of one variable
+     * and returns multiple values.
+    */
     class VectorFunction1D {
 
         public:
@@ -21,7 +25,7 @@ namespace csc450lib_calc {
             // Public methods for the interface
             VectorFunction1D() = default;
             VectorFunction1D(float xmin, float xmax);
-            VectorFunction1D(std::shared_ptr<DomainOfDefinition> d);
+            VectorFunction1D(DomainOfDefinition d);
             virtual float func(float x) const = 0;
             virtual float dfunc(float x) const;
             virtual float d2func(float x) const;
@@ -31,6 +35,7 @@ namespace csc450lib_calc {
             bool isDefinedAt(float x) const;
             float getLowerBound(void) const;
             float getUpperBound(void) const;
+            void setDomain(DomainOfDefinition d);
             virtual bool derivativeIsExact() const = 0;
             virtual bool secondDerivativeIsExact() const = 0;
 

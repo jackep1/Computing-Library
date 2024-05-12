@@ -9,7 +9,7 @@ using namespace csc450lib_calc;
  * The default constructor for the Function1D class that sets the domain of definition to be all real numbers.
 */
 Function1D::Function1D()
-: domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}){}
+: domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}) {}
 
 /**
  * The constructor for the Function1D class that sets the lower and upper bounds of the function.
@@ -30,7 +30,6 @@ Function1D::Function1D(DomainOfDefinition d)
 
 /**
  * Determines if the function is defined at the given x value.
- * Checks by looking to see if the x value is within the bounds of the function.
  * 
  * @param x the x value to check
  * @return true if the function is defined at x, false otherwise
@@ -44,7 +43,7 @@ bool Function1D::isDefinedAt(float x) const
 }
 
 /**
- * Returns the lower bound of the function.
+ * Gets the lower bound of the function.
  * 
  * @return the lower bound of the function
 */
@@ -54,7 +53,7 @@ float Function1D::getLowerBound(void) const
 }
 
 /**
- * Returns the upper bound of the function.
+ * Gets the upper bound of the function.
  * 
  * @return the upper bound of the function
 */
@@ -74,17 +73,16 @@ void Function1D::setDomain(DomainOfDefinition d)
 }
 
 /**
- * Returns the deriviative of the function at the given point x using 'step' h
+ * Returns the deriviative of the function at x using an approximation.
  * 
  * @param x the point at which to evaluate the derivative
- * @param h the size of the small step 'h' used to calculate derivative
  * 
  * @return the derivative at x
 */
 float Function1D::dfunc(float x) const
 {
     if (!this->isDefinedAt(x)) {
-        throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "x not in domain");
+        throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "The function is not defined at the given x value.");
     }
     float h = x * 0.001;
     if (x == 0) {
@@ -97,7 +95,7 @@ float Function1D::dfunc(float x) const
 }
 
 /**
- * Returns the second derivative of the function at the given point x
+ * Returns the second derivative of the function at x using an approximation.
  * 
  * @param x the point at which to evaluate the second derivative
  * 
