@@ -1,3 +1,4 @@
+#include <DomainOfDefinition.h>
 #include <vector>
 
 namespace csc450lib_calc {
@@ -25,6 +26,8 @@ namespace csc450lib_calc {
             virtual std::vector<float> grad(const std::vector<float>& x) const;
 
         protected:
+            // Domain of the function
+            // DomainOfDefinition domain;
             // The number of dimensions of the function
             int N;
     };

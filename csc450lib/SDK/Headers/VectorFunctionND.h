@@ -16,7 +16,6 @@ namespace csc450lib_calc {
             VectorFunctionND& operator =(VectorFunctionND&& obj) = delete;
 
             // Public methods for the interface
-            VectorFunctionND() = default;
             VectorFunctionND(int n);
             virtual std::vector<float> func(const std::vector<float>& x) const = 0;
             virtual std::vector<std::vector<float>> grad(const std::vector<float>& x) const = 0;
