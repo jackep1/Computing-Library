@@ -1,0 +1,851 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     32439,        843]
+NotebookOptionsPosition[     28673,        778]
+NotebookOutlinePosition[     29148,        795]
+CellTagsIndexPosition[     29105,        792]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Analysis of Data", "Title",
+ CellChangeTimes->{{3.9237591833388*^9, 
+  3.9237591859564047`*^9}},ExpressionUUID->"66070930-f1a8-435d-bcd6-\
+4d7b2013d80a"],
+
+Cell["Jonathan Pincince", "Subtitle",
+ CellChangeTimes->{{3.923759195067731*^9, 
+  3.923759196618258*^9}},ExpressionUUID->"1d582297-bea1-4776-8d32-\
+e67fbf404901"],
+
+Cell[CellGroupData[{
+
+Cell["C++ Validation", "Section",
+ CellChangeTimes->{{3.92374632033502*^9, 
+  3.9237463227316303`*^9}},ExpressionUUID->"6e20ca2b-dc0f-43c4-b3d0-\
+8818583138f6"],
+
+Cell["\<\
+This section\[CloseCurlyQuote]s for validation of the C++ code I wrote to \
+compute the derivative of a function. I\[CloseCurlyQuote]ll be using the same \
+cosine function as I did for the first assignment, as well a polynomial \
+function.\
+\>", "Text",
+ CellChangeTimes->{{3.923747266809236*^9, 
+  3.923747329939929*^9}},ExpressionUUID->"1ddeb62f-ca64-4e4c-8c0a-\
+fdcb3d504f6e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"FileNames", "[", "]"}]}], "Input",
+ CellChangeTimes->{{3.923746331857813*^9, 3.923746386191305*^9}, {
+  3.923746447110943*^9, 3.9237464612639217`*^9}},
+ CellLabel->
+  "In[996]:=",ExpressionUUID->"7c226cb5-4811-47ce-9daa-a3ca0326a346"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"A2.nb\"\>", ",", "\<\"Analysis.nb\"\>", 
+   ",", "\<\"cosad.txt\"\>", ",", "\<\"cosd.txt\"\>", ",", "\<\"pd.txt\"\>"}],
+   "}"}]], "Output",
+ CellChangeTimes->{
+  3.9237464629356117`*^9, {3.923747832517931*^9, 3.923747844718478*^9}, 
+   3.923749378425016*^9, 3.923756672276004*^9, 3.923757894379549*^9, 
+   3.923758095105207*^9, 3.923758695804356*^9, 3.923758938867309*^9, 
+   3.923759255811719*^9, 3.923759291059897*^9},
+ CellLabel->
+  "Out[997]=",ExpressionUUID->"13d22e11-9544-4ee5-913b-a121b0471a81"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Cosine Function", "Section",
+ CellChangeTimes->{{3.923747248546678*^9, 3.923747252608485*^9}, {
+  3.923759445857606*^9, 
+  3.9237594462031507`*^9}},ExpressionUUID->"df0f53ad-928b-4caf-b6bd-\
+4eef0de057a5"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"f", "[", "x_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"Cos", "[", 
+    RowBox[{
+     RowBox[{"0.01", 
+      SuperscriptBox["x", "2"]}], "+", "1"}], "]"}], "/", 
+   "x"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cosExactPoints", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<cosd.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cosApproxPoints", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<cosad.txt\>\"", ",", "\"\<Table\>\""}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.9237473470537643`*^9, 3.923747428612835*^9}, 
+   3.92374766917654*^9, {3.923747823621992*^9, 3.923747836881124*^9}, {
+   3.923758008307358*^9, 3.923758029667902*^9}},
+ CellLabel->
+  "In[998]:=",ExpressionUUID->"271a1308-4fc3-414f-b467-cede62b9da5f"],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyQuote]Exact\[CloseCurlyQuote] Derivative Method", \
+"Subsection",
+ CellChangeTimes->{{3.92375936976402*^9, 
+  3.923759386781353*^9}},ExpressionUUID->"5f97e167-aa3d-40db-a841-\
+2fa46c62a033"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"MMADerivs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CDerivs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AbsDerivDiffs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RelDerivDiffs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CosInputs", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"cosExactPoints", "[", 
+       RowBox[{"[", 
+        RowBox[{"9", "*", "k"}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", "10"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CDerivOutputs", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"cosExactPoints", "[", 
+        RowBox[{"[", 
+         RowBox[{"9", "*", "k"}], "]"}], "]"}], "[", 
+       RowBox[{"[", "2", "]"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", "10"}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"k", "=", "1"}], ",", 
+   RowBox[{"k", "<=", 
+    RowBox[{
+     RowBox[{"Dimensions", "[", "CosInputs", "]"}], "[", 
+     RowBox[{"[", "1", "]"}], "]"}]}], ",", 
+   RowBox[{"k", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"MMAD", "=", 
+     RowBox[{
+      RowBox[{"f", "'"}], "[", 
+      RowBox[{"MMACosInputs", "[", 
+       RowBox[{"[", "k", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"CD", "=", 
+     RowBox[{"CDerivOutputs", "[", 
+      RowBox[{"[", "k", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"AbsErr", "=", 
+     RowBox[{"CD", "-", "MMAD"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"RelErr", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"100", "*", "AbsErr"}], ")"}], "/", "MMAD"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"MMADerivs", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"MMADerivs", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"CosInputs", "[", 
+          RowBox[{"[", "k", "]"}], "]"}], ",", "MMAD"}], "}"}]}], "]"}]}], 
+    ";", "\[IndentingNewLine]", 
+    RowBox[{"CDerivs", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"CDerivs", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"CosInputs", "[", 
+          RowBox[{"[", "k", "]"}], "]"}], ",", "CD"}], "}"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"AbsDerivDiffs", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"AbsDerivDiffs", ",", 
+       RowBox[{"{", "AbsErr", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"RelDerivDiffs", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"RelDerivDiffs", ",", 
+       RowBox[{"{", "RelErr", "}"}]}], "]"}]}], ";"}]}], 
+  "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<An x value followed by the derivative of the function at that point, \
+as computed by Mathematica.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "MMADerivs", "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<An x value followed by derivative at that point, this time as \
+computed by the C++ program using the 'exact' implementation, where dfunc() \
+has been overwritten by the child class.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "CDerivs", "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<The absolute difference between Mathematica's derivative and the C++ \
+computed value.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "DerivDiffs", "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<The relative error of the C++ calculation as percentages. These are \
+all less than a percent of a percent, so I'd say the C++ program is doing a \
+reasonably good job.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "RelDerivDiffs"}], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQAWIQvfrVupAv1m8dZZJqY0H0zOJzKSCaQ/pUGYguDl/U
+CKJjmm9MAtFlflNUvwLp05PUjUC02cRDNiD64oLF9iD6y5t8ZxB9gyfaBUQv
+2x3jBaJnfgoMAdFHzL1TfwDpOWJnskC04yORAhA9ocO1HkQfavnRCqJjHv9d
+DKJ3zrZcBaJl3K1Xg8U/XNwIogt+sW4D0W0ME/eC6CdN7UdAdM3skJMgevqV
+uedAdG+Bgs9PIK2ntDQARPu8nhsFot9EnQTTR8ONc0B0StTOAhB9JlepCkQz
+FG8G0z5zzveB6A9+3P0gWrJYeT2I1lXm3wiiAfyQr8Q=
+  "],
+ CellLabel->
+  "In[1001]:=",ExpressionUUID->"5ebd3803-3cb2-4033-8ead-337e9563a63f"],
+
+Cell[BoxData["\<\"An x value followed by the derivative of the function at \
+that point, as computed by Mathematica.\"\>"], "Print",
+ CellChangeTimes->{3.923756672300385*^9, 3.923757894414196*^9, 
+  3.923758095135662*^9, 3.923758695833003*^9, 3.9237589388963423`*^9, 
+  3.923759255860515*^9, 3.923759291109477*^9},
+ CellLabel->
+  "During evaluation of \
+In[1001]:=",ExpressionUUID->"74a5dd93-f263-49b8-8020-1fb861612d73"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.9`", ",", 
+     RowBox[{"-", "0.6755197794570392`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1.8`", ",", 
+     RowBox[{"-", "0.17542985362666563`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"2.7`", ",", 
+     RowBox[{"-", "0.08308321450952788`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"3.6`", ",", 
+     RowBox[{"-", "0.05103402186025245`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4.5`", ",", 
+     RowBox[{"-", "0.036437929080056955`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5.4`", ",", 
+     RowBox[{"-", "0.02867627105628663`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"6.3`", ",", 
+     RowBox[{"-", "0.02405767703097586`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"7.2`", ",", 
+     RowBox[{"-", "0.02098282173285375`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8.09999`", ",", 
+     RowBox[{"-", "0.018628714673004355`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", 
+     RowBox[{"-", "0.016505489132684893`"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.9237477679848843`*^9, {3.923747832585436*^9, 3.923747996489099*^9}, 
+   3.923749378467099*^9, 3.923749412761586*^9, {3.9237495235087433`*^9, 
+   3.9237495401605053`*^9}, 3.923756005338303*^9, 3.923756672302464*^9, 
+   3.9237578944156027`*^9, 3.923758095136346*^9, 3.923758695833819*^9, 
+   3.923758938897118*^9, 3.9237592558611727`*^9, 3.923759291110695*^9},
+ CellLabel->
+  "Out[1009]=",ExpressionUUID->"7ed4427b-c699-4998-93d4-220d4ef50327"],
+
+Cell[BoxData["\<\"An x value followed by derivative at that point, this time \
+as computed by the C++ program using the 'exact' implementation, where \
+dfunc() has been overwritten by the child class.\"\>"], "Print",
+ CellChangeTimes->{3.923756672300385*^9, 3.923757894414196*^9, 
+  3.923758095135662*^9, 3.923758695833003*^9, 3.9237589388963423`*^9, 
+  3.923759255860515*^9, 3.923759291111814*^9},
+ CellLabel->
+  "During evaluation of \
+In[1001]:=",ExpressionUUID->"53252fd8-d14c-4cdb-a6b1-ae76f19c3598"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.9`", ",", 
+     RowBox[{"-", "0.67552`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1.8`", ",", 
+     RowBox[{"-", "0.17543`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"2.7`", ",", 
+     RowBox[{"-", "0.0830832`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"3.6`", ",", 
+     RowBox[{"-", "0.0510341`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4.5`", ",", 
+     RowBox[{"-", "0.036438`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5.4`", ",", 
+     RowBox[{"-", "0.0286763`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"6.3`", ",", 
+     RowBox[{"-", "0.0240577`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"7.2`", ",", 
+     RowBox[{"-", "0.0209828`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8.09999`", ",", 
+     RowBox[{"-", "0.0186287`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", 
+     RowBox[{"-", "0.0165055`"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.9237477679848843`*^9, {3.923747832585436*^9, 3.923747996489099*^9}, 
+   3.923749378467099*^9, 3.923749412761586*^9, {3.9237495235087433`*^9, 
+   3.9237495401605053`*^9}, 3.923756005338303*^9, 3.923756672302464*^9, 
+   3.9237578944156027`*^9, 3.923758095136346*^9, 3.923758695833819*^9, 
+   3.923758938897118*^9, 3.9237592558611727`*^9, 3.923759291112567*^9},
+ CellLabel->
+  "Out[1011]=",ExpressionUUID->"c989dc1b-15b0-4457-99fd-1c651625be5c"],
+
+Cell[BoxData["\<\"The absolute difference between Mathematica's derivative \
+and the C++ computed value.\"\>"], "Print",
+ CellChangeTimes->{3.923756672300385*^9, 3.923757894414196*^9, 
+  3.923758095135662*^9, 3.923758695833003*^9, 3.9237589388963423`*^9, 
+  3.923759255860515*^9, 3.923759291113098*^9},
+ CellLabel->
+  "During evaluation of \
+In[1001]:=",ExpressionUUID->"d6510bc3-3551-4f76-9150-b437682ef8e7"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "2.2054296078266589`*^-7", "}"}], ",", 
+   RowBox[{"{", "1.4637333436984257`*^-7", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "1.450952788473181`*^-8"}], "}"}], ",", 
+   RowBox[{"{", "7.813974754744546`*^-8", "}"}], ",", 
+   RowBox[{"{", "7.09199430432017`*^-8", "}"}], ",", 
+   RowBox[{"{", "2.894371336700785`*^-8", "}"}], ",", 
+   RowBox[{"{", "2.2969024141006322`*^-8", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "2.173285374926226`*^-8"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "1.4673004353205066`*^-8"}], "}"}], ",", 
+   RowBox[{"{", "1.0867315106827258`*^-8", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.9237477679848843`*^9, {3.923747832585436*^9, 3.923747996489099*^9}, 
+   3.923749378467099*^9, 3.923749412761586*^9, {3.9237495235087433`*^9, 
+   3.9237495401605053`*^9}, 3.923756005338303*^9, 3.923756672302464*^9, 
+   3.9237578944156027`*^9, 3.923758095136346*^9, 3.923758695833819*^9, 
+   3.923758938897118*^9, 3.9237592558611727`*^9, 3.923759291113641*^9},
+ CellLabel->
+  "Out[1013]=",ExpressionUUID->"a1b31c3d-fa88-416d-bcbf-979c8b34b259"],
+
+Cell[BoxData["\<\"The relative error of the C++ calculation as percentages. \
+These are all less than a percent of a percent, so I'd say the C++ program is \
+doing a reasonably good job.\"\>"], "Print",
+ CellChangeTimes->{3.923756672300385*^9, 3.923757894414196*^9, 
+  3.923758095135662*^9, 3.923758695833003*^9, 3.9237589388963423`*^9, 
+  3.923759255860515*^9, 3.9237592911141872`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1001]:=",ExpressionUUID->"c64d5378-300b-4642-904e-003111f0693d"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", "0.000032647890926292506`", "}"}], ",", 
+   RowBox[{"{", "0.00008343695861557373`", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.000017463849912870034`"}], "}"}], ",", 
+   RowBox[{"{", "0.00015311305027343756`", "}"}], ",", 
+   RowBox[{"{", "0.00019463220011045384`", "}"}], ",", 
+   RowBox[{"{", "0.00010093262582919613`", "}"}], ",", 
+   RowBox[{"{", "0.00009547482124492807`", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.00010357450502109616`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.00007876552199529003`"}], "}"}], ",", 
+   RowBox[{"{", "0.0000658406122924726`", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.9237477679848843`*^9, {3.923747832585436*^9, 3.923747996489099*^9}, 
+   3.923749378467099*^9, 3.923749412761586*^9, {3.9237495235087433`*^9, 
+   3.9237495401605053`*^9}, 3.923756005338303*^9, 3.923756672302464*^9, 
+   3.9237578944156027`*^9, 3.923758095136346*^9, 3.923758695833819*^9, 
+   3.923758938897118*^9, 3.9237592558611727`*^9, 3.923759291114744*^9},
+ CellLabel->
+  "Out[1015]=",ExpressionUUID->"bcb67350-858f-44ee-9f60-dc591554348a"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Approximate Derivative Method", "Subsection",
+ CellChangeTimes->{{3.923759394876912*^9, 
+  3.9237594011635513`*^9}},ExpressionUUID->"84d09701-ae8e-41cb-83d5-\
+a4bddb9c0cce"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"MMADerivsApprox", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CDerivsApprox", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AbsDerivDiffsApprox", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RelDerivDiffsApprox", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RelErrorDiffs", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"CosInputs", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"cosApproxPoints", "[", 
+       RowBox[{"[", 
+        RowBox[{"9", "*", "k"}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1", ",", "10"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"CDerivOutputs", "=", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"cosApproxPoints", "[", 
+        RowBox[{"[", 
+         RowBox[{"9", "*", "k"}], "]"}], "]"}], "[", 
+       RowBox[{"[", "2", "]"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "1", ",", "10"}], "}"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"k", "=", "1"}], ",", 
+   RowBox[{"k", "<=", 
+    RowBox[{
+     RowBox[{"Dimensions", "[", "CosInputs", "]"}], "[", 
+     RowBox[{"[", "1", "]"}], "]"}]}], ",", 
+   RowBox[{"k", "++"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"MMAD", "=", 
+     RowBox[{
+      RowBox[{"f", "'"}], "[", 
+      RowBox[{"MMACosInputs", "[", 
+       RowBox[{"[", "k", "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"CD", "=", 
+     RowBox[{"CDerivOutputs", "[", 
+      RowBox[{"[", "k", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"AbsErr", "=", 
+     RowBox[{"CD", "-", "MMAD"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"RelErr", "=", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"100", "*", "AbsErr"}], ")"}], "/", "MMAD"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"MMADerivsApprox", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"MMADerivsApprox", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"CosInputs", "[", 
+          RowBox[{"[", "k", "]"}], "]"}], ",", "MMAD"}], "}"}]}], "]"}]}], 
+    ";", "\[IndentingNewLine]", 
+    RowBox[{"CDerivsApprox", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"CDerivsApprox", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"CosInputs", "[", 
+          RowBox[{"[", "k", "]"}], "]"}], ",", "CD"}], "}"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"AbsDerivDiffsApprox", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"AbsDerivDiffsApprox", ",", 
+       RowBox[{"{", "AbsErr", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"RelDerivDiffsApprox", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"RelDerivDiffsApprox", ",", 
+       RowBox[{"{", "RelErr", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"RelErrorDiffs", "=", 
+     RowBox[{"Append", "[", 
+      RowBox[{"RelErrorDiffs", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"RelDerivDiffs", "[", 
+          RowBox[{"[", "k", "]"}], "]"}], "-", "RelErr"}], "}"}]}], "]"}]}], 
+    ";"}]}], "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<An x value followed by the derivative of the function at that point, \
+as computed by Mathematica.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "MMADerivsApprox", "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<An x value followed by derivative at that point, this time as \
+computed by the C++ program using the 'approximate' implementation, where \
+dfunc() uses Function1D's approximation.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "CDerivsApprox", "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<The absolute difference between Mathematica's derivative and the C++ \
+computed value.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "DerivDiffsApprox", "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<The relative error of the C++ calculation as percentages. Again, \
+these relative errors are tiny values.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "RelDerivDiffsApprox", "\[IndentingNewLine]", \
+
+ RowBox[{
+  RowBox[{
+  "Print", "[", 
+   "\"\<The difference between the relative errors of the 'exact' dfunc \
+method vs. Function1D's approximation. Surprisingly, most of these \
+differences are positive, meaning that the relative error of the 'exact' \
+method is actually larger than the approximate method for most tested inputs, \
+but this isn't always the case.\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", "RelErrorDiffs"}], "Input",
+ CellChangeTimes->{
+  3.923757986712245*^9, {3.9237580599737463`*^9, 3.9237580629159727`*^9}, {
+   3.923758164800836*^9, 3.923758183754663*^9}, {3.923758485104537*^9, 
+   3.923758712249325*^9}, {3.9237587882058*^9, 3.923758816392939*^9}, {
+   3.923758849659574*^9, 3.9237589257163982`*^9}},
+ CellLabel->
+  "In[1016]:=",ExpressionUUID->"ce469c69-7cbd-4b66-ba2a-59feb72630bd"],
+
+Cell[BoxData["\<\"An x value followed by the derivative of the function at \
+that point, as computed by Mathematica.\"\>"], "Print",
+ CellChangeTimes->{
+  3.92375809515384*^9, {3.923758695852201*^9, 3.923758716953171*^9}, 
+   3.923758938915659*^9, 3.923759255880225*^9, 3.9237592911316547`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1016]:=",ExpressionUUID->"d7135f5e-3bda-47d1-b023-ae70c68998d3"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.9`", ",", 
+     RowBox[{"-", "0.6755197794570392`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1.8`", ",", 
+     RowBox[{"-", "0.17542985362666563`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"2.7`", ",", 
+     RowBox[{"-", "0.08308321450952788`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"3.6`", ",", 
+     RowBox[{"-", "0.05103402186025245`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4.5`", ",", 
+     RowBox[{"-", "0.036437929080056955`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5.4`", ",", 
+     RowBox[{"-", "0.02867627105628663`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"6.3`", ",", 
+     RowBox[{"-", "0.02405767703097586`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"7.2`", ",", 
+     RowBox[{"-", "0.02098282173285375`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8.09999`", ",", 
+     RowBox[{"-", "0.018628714673004355`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", 
+     RowBox[{"-", "0.016505489132684893`"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.923758095154798*^9, {3.9237586958529463`*^9, 3.923758716954194*^9}, 
+   3.923758938916339*^9, 3.923759255881003*^9, 3.923759291132457*^9},
+ CellLabel->
+  "Out[1025]=",ExpressionUUID->"0d918ba9-6c6d-4a6a-af0d-bf312975fcba"],
+
+Cell[BoxData["\<\"An x value followed by derivative at that point, this time \
+as computed by the C++ program using the 'approximate' implementation, where \
+dfunc() uses Function1D's approximation.\"\>"], "Print",
+ CellChangeTimes->{
+  3.92375809515384*^9, {3.923758695852201*^9, 3.923758716953171*^9}, 
+   3.923758938915659*^9, 3.923759255880225*^9, 3.923759291132998*^9},
+ CellLabel->
+  "During evaluation of \
+In[1016]:=",ExpressionUUID->"0dfcb025-a593-4b0e-83ee-56d2d4371573"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.9`", ",", 
+     RowBox[{"-", "0.675519`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1.8`", ",", 
+     RowBox[{"-", "0.175428`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"2.7`", ",", 
+     RowBox[{"-", "0.083085`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"3.6`", ",", 
+     RowBox[{"-", "0.0510313`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4.5`", ",", 
+     RowBox[{"-", "0.0364383`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5.4`", ",", 
+     RowBox[{"-", "0.0286754`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"6.3`", ",", 
+     RowBox[{"-", "0.024058`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"7.2`", ",", 
+     RowBox[{"-", "0.0209821`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"8.09999`", ",", 
+     RowBox[{"-", "0.0186278`"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"9", ",", 
+     RowBox[{"-", "0.0165054`"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.923758095154798*^9, {3.9237586958529463`*^9, 3.923758716954194*^9}, 
+   3.923758938916339*^9, 3.923759255881003*^9, 3.923759291133665*^9},
+ CellLabel->
+  "Out[1027]=",ExpressionUUID->"bfc5bdae-b9ec-426d-94a6-494cb3d563b0"],
+
+Cell[BoxData["\<\"The absolute difference between Mathematica's derivative \
+and the C++ computed value.\"\>"], "Print",
+ CellChangeTimes->{
+  3.92375809515384*^9, {3.923758695852201*^9, 3.923758716953171*^9}, 
+   3.923758938915659*^9, 3.923759255880225*^9, 3.923759291134235*^9},
+ CellLabel->
+  "During evaluation of \
+In[1016]:=",ExpressionUUID->"26215d38-8a6f-4584-9aa1-afe65c269ae5"],
+
+Cell[BoxData["DerivDiffsApprox"], "Output",
+ CellChangeTimes->{
+  3.923758095154798*^9, {3.9237586958529463`*^9, 3.923758716954194*^9}, 
+   3.923758938916339*^9, 3.923759255881003*^9, 3.923759291134709*^9},
+ CellLabel->
+  "Out[1029]=",ExpressionUUID->"62543b72-df82-4d4f-97ee-3b45888ccdcf"],
+
+Cell[BoxData["\<\"The relative error of the C++ calculation as percentages. \
+Again, these relative errors are tiny values.\"\>"], "Print",
+ CellChangeTimes->{
+  3.92375809515384*^9, {3.923758695852201*^9, 3.923758716953171*^9}, 
+   3.923758938915659*^9, 3.923759255880225*^9, 3.923759291135112*^9},
+ CellLabel->
+  "During evaluation of \
+In[1016]:=",ExpressionUUID->"3500d8a0-80b2-40e6-bfd5-a8e049eaa0d7"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"-", "0.00011538626446624434`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.0010566198553507789`"}], "}"}], ",", 
+   RowBox[{"{", "0.0021490387470752435`", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.005333422985754741`"}], "}"}], ",", 
+   RowBox[{"{", "0.0010179501206831751`", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.0030375507503098355`"}], "}"}], ",", 
+   RowBox[{"{", "0.0013424780111703245`", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.00343963677973075`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.004910016715647537`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"-", "0.0005400184397811903`"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.923758095154798*^9, {3.9237586958529463`*^9, 3.923758716954194*^9}, 
+   3.923758938916339*^9, 3.923759255881003*^9, 3.923759291135641*^9},
+ CellLabel->
+  "Out[1031]=",ExpressionUUID->"2e9295f9-51b9-484b-ae3b-02fec7c2d539"],
+
+Cell[BoxData["\<\"The difference between the relative errors of the 'exact' \
+dfunc method vs. Function1D's approximation. Surprisingly, most of these \
+differences are positive, meaning that the relative error of the 'exact' \
+method is actually larger than the approximate method for most tested inputs, \
+but this isn't always the case.\"\>"], "Print",
+ CellChangeTimes->{
+  3.92375809515384*^9, {3.923758695852201*^9, 3.923758716953171*^9}, 
+   3.923758938915659*^9, 3.923759255880225*^9, 3.923759291136118*^9},
+ CellLabel->
+  "During evaluation of \
+In[1016]:=",ExpressionUUID->"fa7794ec-ba7b-418a-b58a-d46669069720"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"{", "0.00014803415539253685`", "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", "0.0011400568139663526`", "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"-", "0.0021665025969881137`"}], "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", "0.005486536036028178`", "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"-", "0.0008233179205727213`"}], "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", "0.0031384833761390315`", "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"-", "0.0012470031899253964`"}], "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", "0.0033360622747096538`", "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", "0.004831251193652247`", "}"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"{", "0.0006058590520736629`", "}"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.923758095154798*^9, {3.9237586958529463`*^9, 3.923758716954194*^9}, 
+   3.923758938916339*^9, 3.923759255881003*^9, 3.923759291136734*^9},
+ CellLabel->
+  "Out[1033]=",ExpressionUUID->"c72886ba-c1ee-49da-a2a6-9acf3352b096"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Polynomial Function", "Section",
+ CellChangeTimes->{{3.923759410670404*^9, 
+  3.923759441554572*^9}},ExpressionUUID->"effd8619-4de8-4fe2-8857-\
+7e177b697508"],
+
+Cell[BoxData[""], "Input",ExpressionUUID->"53636708-5090-444e-a185-40ad80c6830d"]
+}, Open  ]],
+
+Cell["The Bouncing Ball", "Section",
+ CellChangeTimes->{{3.923759435507299*^9, 
+  3.923759438371985*^9}},ExpressionUUID->"59e812ec-72b7-40e3-bf3d-\
+6e8fc92f8b3f"]
+}, Open  ]]
+},
+WindowSize->{715.5, 802.5},
+WindowMargins->{{-2.25, Automatic}, {Automatic, -22.5}},
+FrontEndVersion->"14.0 for Linux x86 (64-bit) (December 12, 2023)",
+StyleDefinitions->FrontEnd`FileName[{"Report"}, "StandardReport.nb", 
+  CharacterEncoding -> "UTF-8"],
+ExpressionUUID->"cf9d823e-a9e8-40f5-bae2-fb9a524d7d87"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 159, 3, 96, "Title",ExpressionUUID->"66070930-f1a8-435d-bcd6-4d7b2013d80a"],
+Cell[742, 27, 163, 3, 33, "Subtitle",ExpressionUUID->"1d582297-bea1-4776-8d32-e67fbf404901"],
+Cell[CellGroupData[{
+Cell[930, 34, 160, 3, 69, "Section",ExpressionUUID->"6e20ca2b-dc0f-43c4-b3d0-8818583138f6"],
+Cell[1093, 39, 389, 8, 57, "Text",ExpressionUUID->"1ddeb62f-ca64-4e4c-8c0a-fdcb3d504f6e"],
+Cell[CellGroupData[{
+Cell[1507, 51, 386, 9, 61, "Input",ExpressionUUID->"7c226cb5-4811-47ce-9daa-a3ca0326a346"],
+Cell[1896, 62, 548, 11, 53, "Output",ExpressionUUID->"13d22e11-9544-4ee5-913b-a121b0471a81"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2493, 79, 211, 4, 69, "Section",ExpressionUUID->"df0f53ad-928b-4caf-b6bd-4eef0de057a5"],
+Cell[2707, 85, 830, 23, 83, "Input",ExpressionUUID->"271a1308-4fc3-414f-b467-cede62b9da5f"],
+Cell[CellGroupData[{
+Cell[3562, 112, 207, 4, 34, "Subsection",ExpressionUUID->"5f97e167-aa3d-40db-a841-2fa46c62a033"],
+Cell[CellGroupData[{
+Cell[3794, 120, 4469, 122, 774, "Input",ExpressionUUID->"5ebd3803-3cb2-4033-8ead-337e9563a63f"],
+Cell[8266, 244, 421, 7, 42, "Print",ExpressionUUID->"74a5dd93-f263-49b8-8020-1fb861612d73"],
+Cell[8690, 253, 1543, 40, 94, "Output",ExpressionUUID->"7ed4427b-c699-4998-93d4-220d4ef50327"],
+Cell[10236, 295, 505, 8, 61, "Print",ExpressionUUID->"53252fd8-d14c-4cdb-a6b1-ae76f19c3598"],
+Cell[10744, 305, 1436, 40, 94, "Output",ExpressionUUID->"c989dc1b-15b0-4457-99fd-1c651625be5c"],
+Cell[12183, 347, 409, 7, 42, "Print",ExpressionUUID->"d6510bc3-3551-4f76-9150-b437682ef8e7"],
+Cell[12595, 356, 1134, 23, 101, "Output",ExpressionUUID->"a1b31c3d-fa88-416d-bcbf-979c8b34b259"],
+Cell[13732, 381, 493, 8, 61, "Print",ExpressionUUID->"c64d5378-300b-4642-904e-003111f0693d"],
+Cell[14228, 391, 1141, 23, 94, "Output",ExpressionUUID->"bcb67350-858f-44ee-9f60-dc591554348a"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15418, 420, 179, 3, 34, "Subsection",ExpressionUUID->"84d09701-ae8e-41cb-83d5-a4bddb9c0cce"],
+Cell[CellGroupData[{
+Cell[15622, 427, 5243, 138, 939, "Input",ExpressionUUID->"ce469c69-7cbd-4b66-ba2a-59feb72630bd"],
+Cell[20868, 567, 401, 7, 42, "Print",ExpressionUUID->"d7135f5e-3bda-47d1-b023-ae70c68998d3"],
+Cell[21272, 576, 1323, 37, 94, "Output",ExpressionUUID->"0d918ba9-6c6d-4a6a-af0d-bf312975fcba"],
+Cell[22598, 615, 481, 8, 61, "Print",ExpressionUUID->"0dfcb025-a593-4b0e-83ee-56d2d4371573"],
+Cell[23082, 625, 1217, 37, 94, "Output",ExpressionUUID->"bfc5bdae-b9ec-426d-94a6-494cb3d563b0"],
+Cell[24302, 664, 387, 7, 42, "Print",ExpressionUUID->"26215d38-8a6f-4584-9aa1-afe65c269ae5"],
+Cell[24692, 673, 290, 5, 53, "Output",ExpressionUUID->"62543b72-df82-4d4f-97ee-3b45888ccdcf"],
+Cell[24985, 680, 406, 7, 42, "Print",ExpressionUUID->"3500d8a0-80b2-40e6-bfd5-a8e049eaa0d7"],
+Cell[25394, 689, 987, 24, 74, "Output",ExpressionUUID->"2e9295f9-51b9-484b-ae3b-02fec7c2d539"],
+Cell[26384, 715, 622, 10, 99, "Print",ExpressionUUID->"fa7794ec-ba7b-418a-b58a-d46669069720"],
+Cell[27009, 727, 1162, 30, 94, "Output",ExpressionUUID->"c72886ba-c1ee-49da-a2a6-9acf3352b096"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28232, 764, 164, 3, 69, "Section",ExpressionUUID->"effd8619-4de8-4fe2-8857-7e177b697508"],
+Cell[28399, 769, 81, 0, 40, "Input",ExpressionUUID->"53636708-5090-444e-a185-40ad80c6830d"]
+}, Open  ]],
+Cell[28495, 772, 162, 3, 69, "Section",ExpressionUUID->"59e812ec-72b7-40e3-bf3d-6e8fc92f8b3f"]
+}, Open  ]]
+}
+]
+*)
+
