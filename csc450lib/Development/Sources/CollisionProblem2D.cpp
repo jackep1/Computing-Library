@@ -23,11 +23,11 @@ CollisionProblem2D::CollisionProblem2D(MortarFunc1D* mortar, Surface2D* surface)
  * @return the height of the mortar above the surface at time t
 */
 float CollisionProblem2D::func(float t) const {
-    std::vector<float> position = this->mortar->func(t);
-    float current_x = this->mortar->getX0() + (position[0] * cosf(this->mortar->getAzimuth()));
-    float current_y = this->mortar->getY0() + (position[0] * sinf(this->mortar->getAzimuth()));
+    float position = this->mortar->func(t);
+    float current_x = this->mortar->getX0() + (position * cosf(this->mortar->getAzimuth()));
+    float current_y = this->mortar->getY0() + (position * sinf(this->mortar->getAzimuth()));
     float surface_height = this->surface->func({current_x, current_y});
-    return position[1] - surface_height;
+    return position - surface_height;
 }
 
 
@@ -60,7 +60,7 @@ MortarFunc1D::MortarFunc1D(float azimuth, float elevation, float x0, float y0, f
  * @param t the time to get the position at
  * @return a vector containing {u, z} of the object at time t
 */
-std::vector<float> MortarFunc1D::func(float t)
+float MortarFunc1D::func(float t) const
 {
     std::vector<float> m_pos(2);
     // u coordinate
@@ -68,7 +68,7 @@ std::vector<float> MortarFunc1D::func(float t)
     // z coordiomate
     m_pos[1] = this->z0 + Vz0 * t - 0.5 * 9.8 * t * t;
 
-    return m_pos;
+    return m_pos[1];
 }
 
 /**
@@ -91,6 +91,23 @@ std::vector<float> MortarFunc1D::getPositionAndVelocity(float t) const {
     return m_pos;
 }
 
+/**
+ * Gets the coordinates {x, y, z} of the object at time t.
+ * 
+ * @param t the time to get the coordinates at
+ * @return a vector containing {x, y, z} of the object at time t
+*/
+std::vector<float> MortarFunc1D::getCoordinates(float t) const {
+    std::vector<float> m_pos(3);
+    // x coordinate
+    m_pos[0] = this->x0 + this->Vx0 * t;
+    // y coordinate
+    m_pos[1] = this->y0 + this->Vy0 * t;
+    // z coordinate
+    m_pos[2] = this->z0 + this->Vz0 * t - 0.5 * 9.8 * t * t;
+
+    return m_pos;
+}
 
 // class IntersectionFunc : public Function1D {
 

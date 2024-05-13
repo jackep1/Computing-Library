@@ -8,9 +8,7 @@
 #include <Function1D.h>
 #include <ExampleFunc1D.h>
 
-#include <Surface.h>
-#include <BallisticFunction.h>
-#include <CollisionProblem.h>
+#include <CollisionProblem1D.h>
 
 #include <NonLinearSolver1D.h>
 
@@ -31,8 +29,8 @@ using namespace csc450lib_calc;
  * @param flight The collision problem
  * @return A vector containing the left and right ends of the search bracket
 */
-vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, shared_ptr<CollisionProblem> flight) {
-
+vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, shared_ptr<CollisionProblem1D> flight)
+{
     // Start left end of bracket at tolerance
     float a = TOL;
     float peak_time = ballistic.getPositionAndVelocity(0)[3] / 9.8;
@@ -41,7 +39,7 @@ vector<float> find_search_bracket(float TOL, BallisticFunction& ballistic, share
     }
 
     // Right end of bracket is at point symmetric to start
-    float b = peak_time * 2;
+    float b = (peak_time * 2) - a;
 
     // Determine sign of right bracket, if negative, find last positive value
     float right_height = flight->func(b);
@@ -161,11 +159,11 @@ int main(int argc, const char* argv[])
     */
 
     // Non-linear solver for finding the collision locations
-    NonLinearSolver1D_bisection bisection_solver;;
+    NonLinearSolver1D_bisection bisection_solver;
 
     // Flat surfaces with different elasticity values
-    FlatSurface flat_elastic_surface(1);
-    FlatSurface flat_absorbant_surface(0.5);
+    FlatSurface1D flat_elastic_surface(1);
+    FlatSurface1D flat_absorbant_surface(0.5);
 
     // Initial ballistic function where projectile
     // is launched from a height of 10 units with
@@ -185,7 +183,7 @@ int main(int argc, const char* argv[])
 
         // Define a collision problem with the perfectly elastic
         // simple surface and the ballistic function
-        shared_ptr<CollisionProblem> flight = make_shared<CollisionProblem>(&ballistic1, &flat_elastic_surface);
+        shared_ptr<CollisionProblem1D> flight = make_shared<CollisionProblem1D>(&ballistic1, &flat_elastic_surface);
         // cout << "Flight created" << endl;
 
         // Determine a search bracket for the location of the collision
@@ -205,7 +203,7 @@ int main(int argc, const char* argv[])
         // find 10 points along the trajectory of the projectile
         float time_interval = bounce.getValStar() / 10;
         for (int j = 0; j < 10; j++) {
-            trajectory.push_back(ballistic1.getPosition(time_interval));
+            trajectory.push_back(ballistic1.getPosition(time_interval * j));
         }
 
         // Write the trajectory to a file

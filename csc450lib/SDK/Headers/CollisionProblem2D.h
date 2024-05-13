@@ -60,9 +60,10 @@ class MortarFunc1D : public csc450lib_calc::Function1D {
     
     public:
         MortarFunc1D(float azimuth, float elevation, float x0, float y0, float z0, float velocity);
-        std::vector<float> func(float t);
+        float func(float t) const;
         std::vector<float> getPosition(float t) const;
         std::vector<float> getPositionAndVelocity(float t) const;
+        std::vector<float> getCoordinates(float t) const;
         float dfunc(float x) const;
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;
@@ -94,7 +95,6 @@ class MortarFunc1D : public csc450lib_calc::Function1D {
         float velocity;
         // The aximuth angle
         float azimuth;
-        virtual float h(float x, float y) = 0;
 };
 
 #endif // MORTARFUNC1D_H
