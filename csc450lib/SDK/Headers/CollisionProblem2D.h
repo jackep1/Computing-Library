@@ -4,55 +4,6 @@
 #include <cmath>
 #include <vector>
 
-
-#ifndef COLLISIONPROBLEM2D_H
-#define COLLISIONPROBLEM2D_H
-
-class CollisionProblem2D : public csc450lib_calc::Function1D {
-    public:
-        CollisionProblem2D(MortarFunc1D* mortar, Surface2D* surface);
-        float func(float t) const;
-
-        bool derivativeIsExact() const { return false;}
-        bool secondDerivativeIsExact() const { return false; }
-        std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
-
-    protected:
-        MortarFunc1D* mortar;
-        Surface2D* surface;
-};
-
-#endif // COLLISIONPROBLEM2D_H
-
-
-
-// #ifndef MORTARFUNCCOORDINATES_H
-// #define MORTARFUNCCOORDINATES_H
-
-// class MortarFuncCoordinates : public csc450lib_calc::VectorFunction1D {
-    
-//     public:
-//         MortarFuncCoordinates(float azimuth, float elevation, float x0, float y0, float velocity);
-//         std::vector<float> func(float t);
-//     protected:
-//         // The initial x position
-//         float x0;
-//         // The initial y position
-//         float y0;
-//         // The initial z position
-//         float z0;
-//         // The initial x-velocity
-//         float Vx0;
-//         // The initial y-velocity
-//         float Vy0;
-//         // The initial z-velocity
-//         float Vz0;
-// };
-
-// #endif /// MORTARFUNCCOORDINATES_H
-
-
-
 #ifndef MORTARFUNC1D_H
 #define MORTARFUNC1D_H
 
@@ -61,13 +12,13 @@ class MortarFunc1D : public csc450lib_calc::Function1D {
     public:
         MortarFunc1D(float azimuth, float elevation, float x0, float y0, float z0, float velocity);
         float func(float t) const;
-        std::vector<float> getPosition(float t) const;
+        // std::vector<float> getPosition(float t) const;
         std::vector<float> getPositionAndVelocity(float t) const;
         std::vector<float> getCoordinates(float t) const;
-        float dfunc(float x) const;
-        bool derivativeIsExact() const;
-        bool secondDerivativeIsExact() const;
-        std::shared_ptr<std::string> getExpressionMMA() const;
+        float dfunc(float x) const { return 0; }
+        bool derivativeIsExact() const { return false; }
+        bool secondDerivativeIsExact() const { return false; }
+        std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
 
         // Getters
         float getX0() const { return x0; }
@@ -115,6 +66,54 @@ class Surface2D : public csc450lib_calc::FunctionND {
 };
 
 #endif // SURFACE2D_H
+
+
+
+#ifndef COLLISIONPROBLEM2D_H
+#define COLLISIONPROBLEM2D_H
+
+class CollisionProblem2D : public csc450lib_calc::Function1D {
+    public:
+        CollisionProblem2D(MortarFunc1D* mortar, Surface2D* surface);
+        float func(float t) const;
+
+        bool derivativeIsExact() const { return false;}
+        bool secondDerivativeIsExact() const { return false; }
+        std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
+
+    protected:
+        MortarFunc1D* mortar;
+        Surface2D* surface;
+};
+
+#endif // COLLISIONPROBLEM2D_H
+
+
+
+// #ifndef MORTARFUNCCOORDINATES_H
+// #define MORTARFUNCCOORDINATES_H
+
+// class MortarFuncCoordinates : public csc450lib_calc::VectorFunction1D {
+    
+//     public:
+//         MortarFuncCoordinates(float azimuth, float elevation, float x0, float y0, float velocity);
+//         std::vector<float> func(float t);
+//     protected:
+//         // The initial x position
+//         float x0;
+//         // The initial y position
+//         float y0;
+//         // The initial z position
+//         float z0;
+//         // The initial x-velocity
+//         float Vx0;
+//         // The initial y-velocity
+//         float Vy0;
+//         // The initial z-velocity
+//         float Vz0;
+// };
+
+// #endif /// MORTARFUNCCOORDINATES_H
 
 
 

@@ -23,7 +23,6 @@ namespace csc450lib_calc {
             VectorFunction1D& operator =(VectorFunction1D&& obj) = delete;
 
             // Public methods for the interface
-            VectorFunction1D() = default;
             VectorFunction1D(float xmin, float xmax);
             VectorFunction1D(DomainOfDefinition d);
             virtual float func(float x) const = 0;

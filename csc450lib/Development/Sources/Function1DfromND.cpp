@@ -7,7 +7,7 @@ using namespace csc450lib_calc;
 
 Function1DfromND::Function1DfromND(std::shared_ptr<FunctionND> fn, const std::vector<float>& x0, const std::vector<float>& uvect)
 : f(fn), x0(x0), uvect(uvect) {
-    if (x0.size() != uvect.size() || x0.size() != fn->N) {
+    if (x0.size() != uvect.size() || x0.size() != fn.get()->getN()) {
         throw CSC450Exception(ErrorCode::UNKNOWN_ERROR, "x0 and uvect must be the same size");
     }
 }

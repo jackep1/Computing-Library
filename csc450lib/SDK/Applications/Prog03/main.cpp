@@ -55,7 +55,7 @@ int main(int argc, const char* argv[])
     ofstream impact_file("../../../../MMA Files/impact_data.txt");
 
     // Vector for points along trajectory
-    vector<float> trajectory;
+    vector<vector<float>> trajectory;
     
     // Define the collision problem
     shared_ptr<CollisionProblem2D> flight = make_shared<CollisionProblem2D>(&mortar, &surface);
@@ -69,7 +69,7 @@ int main(int argc, const char* argv[])
     // Write the trajectory to file
     float time_interval = impact_data.getValStar() / 10;
     for (int j = 0; j < 10; j++) {
-        trajectory.push_back(mortar.getPosition(time_interval * j)[1]);
+        trajectory.push_back(mortar.getCoordinates(time_interval * j));
     }
 
     float x_impact = mortar.getCoordinates(impact_data.getValStar())[0];

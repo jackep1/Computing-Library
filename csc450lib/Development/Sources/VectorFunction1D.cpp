@@ -8,8 +8,8 @@ using namespace csc450lib_calc;
 /**
  * The default constructor for the class, sets the domain to be all real numbers.
 */
-VectorFunction1D::VectorFunction1D()
-: domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}) {}
+// VectorFunction1D::VectorFunction1D()
+// : domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}) {}
 
 /**
  * The constructor that sets the lower and upper bounds of the function.

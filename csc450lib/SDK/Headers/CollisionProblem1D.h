@@ -3,30 +3,6 @@
 #include <cmath>
 #include <vector>
 
-
-#ifndef COLLISIONPROBLEM1D_H
-#define COLLISIONPROBLEM1D_H
-
-class CollisionProblem1D : public csc450lib_calc::Function1D {
-    public:
-        // Public methods for the interface
-        CollisionProblem1D(std::shared_ptr<BallisticFunction> ballistic, std::shared_ptr<Surface1D> surface);
-        float func(float t) const;
-
-        // Some methods that are useless but must be defined
-        bool derivativeIsExact() const { return false; }
-        bool secondDerivativeIsExact() const { return false; }
-        std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
-
-    protected:
-        std::shared_ptr<BallisticFunction> ballistic;
-        std::shared_ptr<Surface1D> surface;
-};
-
-#endif // COLLISIONPROBLEM1D_H
-
-
-
 #ifndef BALLISTICFUNCTION_H
 #define BALLISTICFUNCTION_H
 
@@ -71,6 +47,29 @@ class Surface1D : public csc450lib_calc::Function1D {
 };
 
 #endif // SURFACE1D_H
+
+
+
+#ifndef COLLISIONPROBLEM1D_H
+#define COLLISIONPROBLEM1D_H
+
+class CollisionProblem1D : public csc450lib_calc::Function1D {
+    public:
+        // Public methods for the interface
+        CollisionProblem1D(std::shared_ptr<BallisticFunction> ballistic, std::shared_ptr<Surface1D> surface);
+        float func(float t) const;
+
+        // Some methods that are useless but must be defined
+        bool derivativeIsExact() const { return false; }
+        bool secondDerivativeIsExact() const { return false; }
+        std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
+
+    protected:
+        std::shared_ptr<BallisticFunction> ballistic;
+        std::shared_ptr<Surface1D> surface;
+};
+
+#endif // COLLISIONPROBLEM1D_H
 
 
 

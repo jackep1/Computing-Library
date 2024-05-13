@@ -23,6 +23,8 @@ namespace csc450lib_calc {
             FunctionND(int n);
             virtual float func(const std::vector<float>& x) = 0;
             virtual std::vector<float> grad(const std::vector<float>& x) const;
+            // Getter
+            int getN() const { return N; }
 
         protected:
             // The number of dimensions of the function

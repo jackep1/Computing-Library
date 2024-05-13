@@ -2,6 +2,9 @@
 
 namespace csc450lib_calc {
 
+    #ifndef SUBDOMAIN_H
+    #define SUBDOMAIN_H
+
     /**
      * A subdomain represents a range of x values. The first
      * bool indicates whether the range is inclusive of the
@@ -17,6 +20,8 @@ namespace csc450lib_calc {
         subDomain(float xMin, float xMax, bool inclMin, bool inclMax)
         : xMin(xMin), xMax(xMax), inclMin(inclMin), inclMax(inclMax) {};
     };
+
+    #endif /// SUBDOMAIN_H
 
     #ifndef DOMAINOFDEFINITION_H
     #define DOMAINOFDEFINITION_H
