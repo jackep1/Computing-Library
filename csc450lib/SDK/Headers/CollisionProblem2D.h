@@ -59,7 +59,7 @@ class CollisionProblem2D : public csc450lib_calc::Function1D {
 class MortarFunc1D : public csc450lib_calc::Function1D {
     
     public:
-        MortarFunc1D(float azimuth, float elevation, float x0, float y0, float velocity);
+        MortarFunc1D(float azimuth, float elevation, float x0, float y0, float z0, float velocity);
         std::vector<float> func(float t);
         std::vector<float> getPosition(float t) const;
         std::vector<float> getPositionAndVelocity(float t) const;
@@ -67,6 +67,16 @@ class MortarFunc1D : public csc450lib_calc::Function1D {
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;
         std::shared_ptr<std::string> getExpressionMMA() const;
+
+        // Getters
+        float getX0() const { return x0; }
+        float getY0() const { return y0; }
+        float getZ0() const { return z0; }
+        float getVx0() const { return Vx0; }
+        float getVy0() const { return Vy0; }
+        float getVz0() const { return Vz0; }
+        float getVelocity() const { return velocity; }
+        float getAzimuth() const { return azimuth; }
     protected:
         // The initial x position
         float x0;
@@ -82,6 +92,8 @@ class MortarFunc1D : public csc450lib_calc::Function1D {
         float Vz0;
         // The initial velocity
         float velocity;
+        // The aximuth angle
+        float azimuth;
         virtual float h(float x, float y) = 0;
 };
 

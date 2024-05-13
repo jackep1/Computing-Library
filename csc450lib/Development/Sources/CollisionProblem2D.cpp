@@ -24,7 +24,9 @@ CollisionProblem2D::CollisionProblem2D(MortarFunc1D* mortar, Surface2D* surface)
 */
 float CollisionProblem2D::func(float t) const {
     std::vector<float> position = this->mortar->func(t);
-    float surface_height = this->surface->func(position[0]);
+    float current_x = this->mortar->getX0() + (position[0] * cosf(this->mortar->getAzimuth()));
+    float current_y = this->mortar->getY0() + (position[0] * sinf(this->mortar->getAzimuth()));
+    float surface_height = this->surface->func({current_x, current_y});
     return position[1] - surface_height;
 }
 
@@ -45,11 +47,11 @@ float CollisionProblem2D::func(float t) const {
  * @param y0 the initial y position
  * @param velocity the initial velocity
 */
-MortarFunc1D::MortarFunc1D(float azimuth, float elevation, float x0, float y0, float velocity)
+MortarFunc1D::MortarFunc1D(float azimuth, float elevation, float x0, float y0, float z0, float velocity)
 : Vx0(velocity * cosf(azimuth) * cosf(elevation)),
   Vy0(velocity * sinf(azimuth) * cosf(elevation)),
   Vz0(velocity * sinf(elevation)), velocity(velocity),
-  x0(x0), y0(y0), z0(h(x0, y0)) {}
+  x0(x0), y0(y0), z0(z0), azimuth(azimuth) {}
 
 
 /**
