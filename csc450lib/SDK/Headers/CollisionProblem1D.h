@@ -1,15 +1,16 @@
 #include <Function1D.h>
+#include <memory>
 #include <cmath>
 #include <vector>
 
 
-#ifndef COLLISIONPROBLEM_H
-#define COLLISIONPROBLEM_H
+#ifndef COLLISIONPROBLEM1D_H
+#define COLLISIONPROBLEM1D_H
 
-class CollisionProblem : public csc450lib_calc::Function1D {
+class CollisionProblem1D : public csc450lib_calc::Function1D {
     public:
         // Public methods for the interface
-        CollisionProblem(BallisticFunction* ballistic, Surface* surface);
+        CollisionProblem1D(std::shared_ptr<BallisticFunction> ballistic, std::shared_ptr<Surface1D> surface);
         float func(float t) const;
 
         // Some methods that are useless but must be defined
@@ -18,11 +19,11 @@ class CollisionProblem : public csc450lib_calc::Function1D {
         std::shared_ptr<std::string> getExpressionMMA() const { return nullptr; }
 
     protected:
-        BallisticFunction* ballistic;
-        Surface* surface;
+        std::shared_ptr<BallisticFunction> ballistic;
+        std::shared_ptr<Surface1D> surface;
 };
 
-#endif // COLLISIONPROBLEM_H
+#endif // COLLISIONPROBLEM1D_H
 
 
 
@@ -51,16 +52,16 @@ class BallisticFunction {
 
 
 
-#ifndef SURFACE_H
-#define SURFACE_H
+#ifndef SURFACE1D_H
+#define SURFACE1D_H
 
 /**
  * Represents a surface in a collision problem.
 */
-class Surface : public csc450lib_calc::Function1D {
+class Surface1D : public csc450lib_calc::Function1D {
 
     public:
-        Surface(float alpha);
+        Surface1D(float alpha);
         std::vector<float> getOutgoingVelocity(float x, float Vinx, float Viny) const;
         void setAlpha(float alpha);
 
@@ -69,64 +70,64 @@ class Surface : public csc450lib_calc::Function1D {
         float a;
 };
 
-#endif // SURFACE_H
+#endif // SURFACE1D_H
 
 
 
-#ifndef FLATSURFACE_H
-#define FLATSURFACE_H
+#ifndef FLATSURFACE1D_H
+#define FLATSURFACE1D_H
 
 /**
- * The FlatSurface class represents a flat surface at y = 1.
+ * The FlatSurface1D class represents a flat surface at y = 1.
 */
-class FlatSurface : public Surface {
+class FlatSurface1D : public Surface1D {
     
     public:
-        FlatSurface(float alpha);
+        FlatSurface1D(float alpha);
         float func(float x) const;
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;
         std::shared_ptr<std::string> getExpressionMMA() const;
 };
 
-#endif // FLATSURFACE_H
+#endif // FLATSURFACE1D_H
 
 
 
-#ifndef EASYSURFACE_H
-#define EASYSURFACE_H
+#ifndef EASYSURFACE1D_H
+#define EASYSURFACE1D_H
 
 /**
- * The EasySurface class represents a surface defined
+ * The EasySurface1D class represents a surface defined
  * by the function f(x) = cos(x)/5 + 1.
 */
-class EasySurface : public Surface {
+class EasySurface1D : public Surface1D {
     public:
-        EasySurface(float alpha);
+        EasySurface1D(float alpha);
         float func(float x) const;
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;
         std::shared_ptr<std::string> getExpressionMMA() const;
 };
 
-#endif // EASYSURFACE_H
+#endif // EASYSURFACE1D_H
 
 
 
-#ifndef HARDSURFACE_H
-#define HARDSURFACE_H
+#ifndef HARDSURFACE1D_H
+#define HARDSURFACE1D_H
 
 /**
  * The HardSurface class represents a surface defined
  * by the function f(x) = 4sin(x) + 5cos(x/2) + (x^3)/10000.
 */
-class HardSurface : public Surface {
+class HardSurface1D : public Surface1D {
     public:
-        HardSurface(float alpha);
+        HardSurface1D(float alpha);
         float func(float x) const;
         bool derivativeIsExact() const;
         bool secondDerivativeIsExact() const;
         std::shared_ptr<std::string> getExpressionMMA() const;
 };
 
-#endif // HARDSURFACE_H
+#endif // HARDSURFACE1D_H

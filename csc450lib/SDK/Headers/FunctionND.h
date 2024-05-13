@@ -14,7 +14,6 @@ namespace csc450lib_calc {
         public:
             // Don't need copy and move constructors and assignment operators
             virtual ~FunctionND() = default;
-            FunctionND() = delete;
             FunctionND(const FunctionND& obj) = delete;
             FunctionND(FunctionND&& obj) = delete;
             FunctionND& operator =(const FunctionND& obj) = delete;
@@ -26,8 +25,6 @@ namespace csc450lib_calc {
             virtual std::vector<float> grad(const std::vector<float>& x) const;
 
         protected:
-            // Domain of the function
-            // DomainOfDefinition domain;
             // The number of dimensions of the function
             int N;
     };
