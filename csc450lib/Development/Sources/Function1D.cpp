@@ -81,7 +81,11 @@ float PolynomialFunction1D::func(float x) const {
     }
     float solution = 0;
     for (int i = coefficients.size(); i > 0; i--) {
-        solution += (coefficients[coefficients.size() - i] * pow(x, i - 1));
+        float ith_term = coefficients[coefficients.size() - i];
+        for (int j = 0; j < i - 1; j++) {
+            ith_term *= x;
+        }
+        solution += ith_term;
     }
     if (solution == NAN) {
         throw CSC450Exception(ErrorCode::FUNCTION_NOT_DEFINED_AT_EVALUATION_POINT, "function is undefined at x");
