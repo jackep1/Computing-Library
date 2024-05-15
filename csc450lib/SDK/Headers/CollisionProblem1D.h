@@ -7,10 +7,34 @@
 #define BALLISTICFUNCTION_H
 
 class BallisticFunction {
+
     public:
-        // Public methods for the interface
+        /**
+         * The constructor for the BallisticFunctions which
+         * sets the initial x and y positions and the initial
+         * x and y velocities.
+         * 
+         * @param x0 the initial x position
+         * @param y0 the initial y position
+         * @param Vx0 the initial x velocity
+         * @param Vy0 the initial y velocity
+        */
         BallisticFunction(float x0, float y0, float Vx0, float Vy0);
+
+        /**
+         * Gets the position of the object at time t.
+         * 
+         * @param t the time to get the position at
+         * @return a vector containing {x, y} of the object at time t
+        */
         std::vector<float> getPosition(float t) const;
+
+        /**
+         * Gets the position and velocity of the object at time t.
+         * 
+         * @param t the time to get the position and velocity at
+         * @return a vector containing {x, y, Vx, Vy} of the object at time t
+        */
         std::vector<float> getPositionAndVelocity(float t) const;
 
     protected:
@@ -37,8 +61,28 @@ class BallisticFunction {
 class Surface1D : public csc450lib_calc::Function1D {
 
     public:
+        /**
+         * Constructs a surface with a given elasticity value.
+         * 
+         * @param alpha the elasticity value of the surface
+        */
         Surface1D(float alpha);
+
+        /**
+         * Gets the outgoing velocity of the object after a collision with the surface.
+         * 
+         * @param x the x position of the object
+         * @param Vinx the x velocity of the object
+         * @param Viny the y velocity of the object
+         * @return a vector containing {x, Voutx, Vouty} of the object after the collision
+        */
         std::vector<float> getOutgoingVelocity(float x, float Vinx, float Viny) const;
+
+        /**
+         * Sets the elasticity value of the surface.
+         * 
+         * @param alpha the new elasticity value of the surface
+        */
         void setAlpha(float alpha);
 
     protected:
@@ -55,8 +99,22 @@ class Surface1D : public csc450lib_calc::Function1D {
 
 class CollisionProblem1D : public csc450lib_calc::Function1D {
     public:
-        // Public methods for the interface
+        /**
+         * CollisiomProblem1D constructor; consists of a ballistic
+         * function and a surface.
+         * 
+         * @param ballistic the ballistic function
+         * @param surface the surface
+         * @return a CollisionProblem object
+        */
         CollisionProblem1D(std::shared_ptr<BallisticFunction> ballistic, std::shared_ptr<Surface1D> surface);
+
+        /**
+         * Gets the object's height above the surface at time t.
+         * 
+         * @param t the time to get the difference at
+         * @return the difference between the height of the surface
+        */
         float func(float t) const;
 
         // Some methods that are useless but must be defined
@@ -82,10 +140,35 @@ class CollisionProblem1D : public csc450lib_calc::Function1D {
 class FlatSurface1D : public Surface1D {
     
     public:
+        /**
+         * FlatSurface1D constructor; defines the elasticity.
+         * 
+         * @param alpha the parameter
+         * @return a FlatSurface object
+        */
         FlatSurface1D(float alpha);
+
+        /**
+         * Gets the height of the surface at a given x value.
+         * 
+         * @param x the x value
+         * @return the height of the surface at x
+        */
         float func(float x) const;
+
+        /**
+         * @return whether the derivative of the surface is exact
+        */
         bool derivativeIsExact() const;
+
+        /**
+         * @return whether the second derivative of the surface is exact
+        */
         bool secondDerivativeIsExact() const;
+
+        /**
+         * @return the expression of the surface in Mathematica format
+        */
         std::shared_ptr<std::string> getExpressionMMA() const;
 };
 
@@ -102,10 +185,35 @@ class FlatSurface1D : public Surface1D {
 */
 class EasySurface1D : public Surface1D {
     public:
+        /**
+         * EasySurface1D constructor; defines the elasticity.
+         * 
+         * @param alpha the parameter
+         * @return an EasySurface object
+        */
         EasySurface1D(float alpha);
+
+        /**
+         * Gets the height of the surface at a given x value.
+         * 
+         * @param x the x value
+         * @return the height of the surface at x
+        */
         float func(float x) const;
+
+        /**
+         * @return whether the derivative of the surface is exact
+        */
         bool derivativeIsExact() const;
+
+        /**
+         * @return whether the second derivative of the surface is exact
+        */
         bool secondDerivativeIsExact() const;
+
+        /**
+         * @return the expression of the surface in Mathematica format
+        */
         std::shared_ptr<std::string> getExpressionMMA() const;
 };
 
@@ -122,10 +230,35 @@ class EasySurface1D : public Surface1D {
 */
 class HardSurface1D : public Surface1D {
     public:
+        /**
+         * HardSurface1D constructor; consists of a single parameter.
+         * 
+         * @param alpha the parameter
+         * @return a HardSurface object
+        */
         HardSurface1D(float alpha);
+
+        /**
+         * Gets the height of the surface at a given x value.
+         * 
+         * @param x the x value
+         * @return the height of the surface at x
+        */
         float func(float x) const;
+
+        /**
+         * @return whether the derivative of the surface is exact
+        */
         bool derivativeIsExact() const;
+
+        /**
+         * @return whether the second derivative of the surface is exact
+        */
         bool secondDerivativeIsExact() const;
+
+        /**
+         * @return the expression of the surface in Mathematica format
+        */
         std::shared_ptr<std::string> getExpressionMMA() const;
 };
 

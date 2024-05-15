@@ -19,11 +19,27 @@ namespace csc450lib_calc {
             FunctionND& operator =(const FunctionND& obj) = delete;
             FunctionND& operator =(FunctionND&& obj) = delete;
 
-            // Public methods for the interface
+            /**
+             * FunctionND constructor
+             * 
+             * @param n the number of dimensions
+            */
             FunctionND(int n);
+
+            /**
+             * Evaluates the function at the given x value.
+             * This is a pure virtual function that must be implemented by derived classes.
+             * 
+             * @param x the value of multiple variables at which to evaluate the function
+            */
             virtual float func(const std::vector<float>& x) = 0;
+
+            /**
+             * Method for finding the partial derivatives of a function.
+            */
             virtual std::vector<float> grad(const std::vector<float>& x) const;
-            // Getter
+
+            // Getter for the number of dimensions
             int getN() const { return N; }
 
         protected:

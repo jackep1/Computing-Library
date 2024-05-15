@@ -4,42 +4,23 @@
 
 using namespace csc450lib_calc;
 
+
 /** Base optimizer methods */
 
-/**
- * Constructor
- * 
- * @param f The function to optimize
-*/
 Optimizer1D::Optimizer1D(std::shared_ptr<Function1D> f): f(f) {}
 
-/**
- * Set the function to optimize
-*/
 void Optimizer1D::setFunction(std::shared_ptr<Function1D> f) {
     this->f = f;
 }
 
-/**
- * Get the function to optimize
- * 
- * @return The function to optimize
-*/
 std::shared_ptr<const Function1D> Optimizer1D::getFunction() const {
     return f;
 }
 
 
-/**
- * Minimization using the steepest descent method
- * 
- * @param startX The starting x value
- * @param xMin The minimum x value
- * @param xMax The maximum x value
- * @param tol The tolerance
- * @param maxNumIters The maximum number of iterations allowed
- * @return The record of the optimization
-*/
+
+/** Steepest descent optimizer methods */
+
 OptimizerRecord1D Optimizer1D_steepestDescent::minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const {
 
     // Initialize the record
@@ -64,16 +45,9 @@ OptimizerRecord1D Optimizer1D_steepestDescent::minimize(float startX, float xMin
 }
 
 
-/**
- * Minimization using the parabolic method
- * 
- * @param startX The starting x value
- * @param xMin The minimum x value
- * @param xMax The maximum x value
- * @param tol The tolerance
- * @param maxNumIters The maximum number of iterations allowed
- * @return The record of the optimization
-*/
+
+/** Parabolic optimizer methods */
+
 OptimizerRecord1D Optimizer1D_parabolic::minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const {
     
     // Initialize starting record values
@@ -130,16 +104,9 @@ OptimizerRecord1D Optimizer1D_parabolic::minimize(float startX, float xMin, floa
 }
 
 
-/**
- * Minimization using the golden section search method
- * 
- * @param startX The starting x value
- * @param xMin The minimum x value
- * @param xMax The maximum x value
- * @param tol The tolerance
- * @param maxNumIters The maximum number of iterations allowed
- * @return The record of the optimization
-*/
+
+/** Golden section search optimizer methods */
+
 OptimizerRecord1D Optimizer1D_gss::minimize(float startX, float xMin, float xMax, float tol, int maxNumIters) const {
 
     // Initialize starting record values

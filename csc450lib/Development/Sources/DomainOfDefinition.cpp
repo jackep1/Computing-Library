@@ -7,20 +7,9 @@ using namespace csc450lib_calc;
 DomainOfDefinition::DomainOfDefinition()
 : domain({subDomain(-std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(), false, false)}) {};
 
-/**
- * Constructor for DomainOfDefinition
- * 
- * @param domain the domain
-*/
 DomainOfDefinition::DomainOfDefinition(std::vector<subDomain> domains)
 : domain(domains) {};
 
-/**
- * Operates on this domain and another domain to find the intersection of the two.
- * 
- * @param other the other domain
- * @return the intersection of the two domains
-*/
 DomainOfDefinition DomainOfDefinition::intersection(const DomainOfDefinition& other) const {
     std::vector<subDomain> newDomain;
     for (auto& subdomain : this->domain) {
@@ -39,13 +28,6 @@ DomainOfDefinition DomainOfDefinition::intersection(const DomainOfDefinition& ot
     return DomainOfDefinition(newDomain);
 }
 
-/**
- * Operates on this domain and another domain to find the union of the two.
- * Tests each subdomain for overlap with the other domain.
- * 
- * @param other the other domain
- * @return the union of the two domains
-*/
 DomainOfDefinition DomainOfDefinition::unionWith(const DomainOfDefinition& other) const {
     std::vector<subDomain> newDomain;
     std::vector<subDomain> combined = this->domain;
@@ -69,12 +51,6 @@ DomainOfDefinition DomainOfDefinition::unionWith(const DomainOfDefinition& other
     return DomainOfDefinition(newDomain);
 }
 
-/**
- * Determines whether this domain fully contains another domain.
- * 
- * @param other the other domain
- * @return whether this domain contains the other domain
-*/
 bool DomainOfDefinition::contains_subdomain(const DomainOfDefinition& other) const {
     for (const auto& othersubdomain : other.domain) {
         bool found = false;
@@ -92,12 +68,6 @@ bool DomainOfDefinition::contains_subdomain(const DomainOfDefinition& other) con
     return true;
 }
 
-/**
- * Determines whether this domain contains a point.
- * 
- * @param x the point
- * @return whether this domain contains the point
-*/
 bool DomainOfDefinition::contains_point(float x) const {
     for (const auto& subdomain : this->domain) {
         if ((x > subdomain.xMin || (x == subdomain.xMin && subdomain.inclMin)) &&
@@ -108,11 +78,6 @@ bool DomainOfDefinition::contains_point(float x) const {
     return false;
 }
 
-/**
- * Gets the domain of definition.
- * 
- * @return the domain of definition
-*/
 std::vector<subDomain> DomainOfDefinition::get_domain() const {
     return this->domain;
 }

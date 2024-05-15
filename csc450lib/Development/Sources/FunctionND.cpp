@@ -4,16 +4,10 @@
 using namespace csc450lib;
 using namespace csc450lib_calc;
 
-/**
- * FunctionND constructor
- * 
- * @param n the number of dimensions
-*/
+
 FunctionND::FunctionND(int n) : N(n) {}
 
-/**
- * Method for finding the partial derivatives of a function.
-*/
+
 std::vector<float> FunctionND::grad(const std::vector<float>& x) const
 {
     std::vector<float> gradient;
