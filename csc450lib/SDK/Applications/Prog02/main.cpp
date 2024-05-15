@@ -22,9 +22,9 @@ int main(int argc, const char* argv[])
     float inf = INFINITY;
     float ninf = -INFINITY;
 
-    ofstream cosExactFile("../../../../MMA Files/cosd.txt");
-    ofstream cosApproxFile("../../../../MMA Files/cosad.txt");
-    ofstream pdFile("../../../../MMA Files/pd.txt");
+    ofstream cosExactFile("../../../../MMA Files/A2/cosd.txt");
+    ofstream cosApproxFile("../../../../MMA Files/A2/cosad.txt");
+    ofstream pdFile("../../../../MMA Files/A2/pd.txt");
 
 
     /** 
@@ -129,11 +129,11 @@ int main(int argc, const char* argv[])
     shared_ptr<BallisticFunction> ballistic = make_shared<BallisticFunction>(0, 10, 10, 10);
 
     // Open files for writing bounce data
-    ofstream flat_bounce1_File("../../../../MMA Files/flat_bounce1.txt");
-    ofstream flat_bounce2_File("../../../../MMA Files/flat_bounce2.txt");
-    ofstream flat_bounce3_File("../../../../MMA Files/flat_bounce3.txt");
-    ofstream flat_bounce4_File("../../../../MMA Files/flat_bounce4.txt");
-    ofstream flat_bounce5_File("../../../../MMA Files/flat_bounce5.txt");
+    ofstream flat_bounce1_File("../../../../MMA Files/A2/flat_bounce1.txt");
+    ofstream flat_bounce2_File("../../../../MMA Files/A2/flat_bounce2.txt");
+    ofstream flat_bounce3_File("../../../../MMA Files/A2/flat_bounce3.txt");
+    ofstream flat_bounce4_File("../../../../MMA Files/A2/flat_bounce4.txt");
+    ofstream flat_bounce5_File("../../../../MMA Files/A2/flat_bounce5.txt");
     vector<ofstream*> flat_bounces = {&flat_bounce1_File, &flat_bounce2_File, &flat_bounce3_File, &flat_bounce4_File, &flat_bounce5_File};
     vector<vector<float>> trajectory;
 

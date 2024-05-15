@@ -4,19 +4,6 @@
 using namespace csc450lib_calc;
 
 
-/**
- * Find the search bracket for the location of the collision. Left bracket is
- * set to the tolerance and the right bracket is set to the point where the
- * height is negative. If the right bracket is positive, the right bracket is
- * increased by 10% until a negative value is found. If the right bracket is
- * negative, the right bracket is decreased by 10% until a positive value is
- * found. The left bracket is set to the largest positive value found.
- * 
- * @param TOL The tolerance for the search bracket
- * @param ballistic The ballistic function
- * @param flight The collision problem
- * @return A vector containing the left and right ends of the search bracket
- */
 std::vector<float> NonLinearSolver1D::find_search_bracket_collision(float TOL, std::shared_ptr<BallisticFunction> ballistic, std::shared_ptr<CollisionProblem1D> flight)
 {
     // Start left end of bracket at tolerance
