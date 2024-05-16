@@ -17,18 +17,19 @@ std::vector<float> NonLinearSolver1D::find_search_bracket_collision(float TOL, s
     float b = (peak_time * 2) - a;
 
     // Determine sign of right bracket, if negative, find last positive value
-    float right_height = flight->func(b);
+    float right_height = ballistic.get()->getPosition(b)[1];
     
     // If right bracket is positive, increase b by 10% until negative value is found
-    int count = 0;
-    int max_count = 100;
-    while (right_height > 0 && count < max_count) {
+    //int count = 0;
+    //int max_count = 100;
+    // std::cout << "Initial bracket: " << a << " - " << b << std::endl;
+    while (right_height > 0 /*&& count < max_count*/) {
         if (a < b) {
             a = b;
         }
         b *= 1.1;
-        right_height = flight->func(b);
-        // std::cout << b << std::endl;
+        right_height = ballistic.get()->getPosition(b)[1];
+        // std::cout << "Revised bracket: " << a << " - " << b << std::endl;
     }
 
     return std::vector<float>{a, b};
@@ -66,7 +67,7 @@ NonLinearSolverRecord1D NonLinearSolver1D_bisection::solve(std::shared_ptr<Funct
 
     // keep going until the search bracket is too small
     // or until we run into machine precision limitations
-    while (abs(b - a) > 2 * tol &&
+    while (b - a > (2 * tol) &&
            c != a &&
            c != b &&
            iterations < n) {
