@@ -35,7 +35,7 @@ int main(int argc, const char* argv[])
     CosFunc f (0, inf);
     CosFuncNoDerivative g (0, inf);
     shared_ptr<PolynomialFunction1D> h = make_shared<PolynomialFunction1D>(vector<float>{1, 2, 3});
-    cout << "Is CosFunc f's derivative method exact or approximate: ";
+    cout << "\nIs CosFunc f's derivative method exact or approximate: ";
     if (f.derivativeIsExact()) {
         cout << "Exact" << endl;
     } else {
@@ -108,7 +108,7 @@ int main(int argc, const char* argv[])
     cout << "Time to calculate exact derivative: " << exact_duration.count() << " microseconds" << endl;
     cout << "Time to calculate approximate derivative: " << approx_duration.count() << " microseconds" << endl;
     cout << "Time to calculate polynomial derivative: " << polynomial_approx_duration.count() << " microseconds" << endl;
-    cout << "PolynomialFunction1D h's derivative at x = 1: " << h->dfunc(1) << endl;
+    cout << "PolynomialFunction1D h's derivative at x = 1: " << h->dfunc(1) << endl << endl << endl;
 
 
     /**
@@ -121,7 +121,7 @@ int main(int argc, const char* argv[])
 
     // Flat surfaces with different elasticity values
     shared_ptr<FlatSurface1D> flat_elastic_surface = make_shared<FlatSurface1D>(1);
-    FlatSurface1D flat_absorbant_surface(0.5);
+    shared_ptr<FlatSurface1D> flat_absorbant_surface = make_shared<FlatSurface1D>(0.5);
 
     // Initial ballistic function where projectile
     // is launched from a height of 10 units with
@@ -137,17 +137,15 @@ int main(int argc, const char* argv[])
     vector<ofstream*> flat_bounces = {&flat_bounce1_File, &flat_bounce2_File, &flat_bounce3_File, &flat_bounce4_File, &flat_bounce5_File};
     vector<vector<float>> trajectory;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 1; i++) {
 
         // Define a collision problem with the perfectly elastic
         // simple surface and the ballistic function
         shared_ptr<CollisionProblem1D> flight = make_shared<CollisionProblem1D>(ballistic, flat_elastic_surface);
-        // cout << "Flight created" << endl;
 
         // Determine a search bracket for the location of the collision
         vector<float> search_bracket = bisection_solver.find_search_bracket_collision(0.01, ballistic, flight);
-        // cout << "Search bracket found" << endl;
-
+        cout << "Search bracket found: " << search_bracket[0] << " - " << search_bracket[1] << endl;
 
         // Find the exact time of collision
         NonLinearSolverRecord1D bounce = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight), search_bracket[0], search_bracket[1], 100, 0.01);
@@ -155,13 +153,15 @@ int main(int argc, const char* argv[])
             cout << "Bisection failed to find bounce location" << endl;
             exit(1);
         }
-        // cout << "Time of bounce found" << endl;
 
         // Use the ballistic function info and bounce location to
         // find 10 points along the trajectory of the projectile
+        cout << bounce.getXStar() << ", " << bounce.getValStar() << endl;
+
         float time_interval = bounce.getValStar() / 10;
         for (int j = 0; j < 10; j++) {
             trajectory.push_back(ballistic.get()->getPosition(time_interval * j));
+            cout << trajectory[j][0] << " " << trajectory[j][1] << endl;
         }
 
         // Write the trajectory to a file
