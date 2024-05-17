@@ -41,6 +41,7 @@ NonLinearSolverRecord1D NonLinearSolver1D_bisection::solve(std::shared_ptr<Funct
     float fa = f.get()->func(a);
     float fb = f.get()->func(b);
     float c = (a + b) / 2;
+    float fc = f.get()->func(c);
 
     // keep going until the search bracket is too small
     // or until we run into machine precision limitations
@@ -48,7 +49,6 @@ NonLinearSolverRecord1D NonLinearSolver1D_bisection::solve(std::shared_ptr<Funct
            c != a &&
            c != b &&
            iterations < n) {
-        float fc = f.get()->func(c);
         if (fa * fc > 0) {
             a = c;
             fa = fc;
@@ -59,13 +59,14 @@ NonLinearSolverRecord1D NonLinearSolver1D_bisection::solve(std::shared_ptr<Funct
             return NonLinearSolverRecord1D(c, fc, iterations, true);
         }
         c = (a + b) / 2;
+        fc = f.get()->func(c);
         iterations++;
     }
     if (iterations < n) {
         success = true;
     }
 
-    return NonLinearSolverRecord1D(c, f.get()->func(c), iterations, success);
+    return NonLinearSolverRecord1D(c, fc, iterations, success);
 }
 
 NonLinearSolverRecord1D NonLinearSolver1D_NewtonRaphson::solve(std::shared_ptr<Function1D> func, float x0, float blank, int n, float tolerance) const {
@@ -78,7 +79,9 @@ NonLinearSolverRecord1D NonLinearSolver1D_NewtonRaphson::solve(std::shared_ptr<F
     float fx = func.get()->func(x0);
     float df = func.get()->dfunc(x0);
     
-    while (iterations < n) {
+    while (x - x0 > (2 * tolerance) &&
+           x != x0 &&
+           iterations < n) {
         // find next x
         float xk1 = x - (fx / df);
         // find next f(x) and f'(x)
@@ -87,7 +90,7 @@ NonLinearSolverRecord1D NonLinearSolver1D_NewtonRaphson::solve(std::shared_ptr<F
         
         // check if we are close enough to the solution
         // or if machine precision is reached
-        if (abs(-fx / df) < tolerance || xk1 == x) {
+        if (abs(-fx / df) < tolerance) {
             break;
         }
 
@@ -112,7 +115,8 @@ NonLinearSolverRecord1D NonLinearSolver1D_secant::solve(std::shared_ptr<Function
     float num = func.get()->func(x1) * (x1 - x0);
     float denom = func.get()->func(x1) - func.get()->func(x0);
 
-    while (iterations < n) {
+    while (abs(num / denom) > (2 * tolerance) &&
+           iterations < n) {
         // find next x
         float x2 = x1 - (num / denom);
         // find next num and denom
