@@ -164,7 +164,7 @@ namespace csc450lib_calc {
              * @param tolerance the tolerance to use when determining if the solution is close enough
              * @return a record containing the solution, the value of the function at the solution, the number of iterations performed, and whether the solution was successful
             */
-            NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> func, float x0, float x1, int n, float tol);
+            NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> func, float x0, float x1, int n, float tol) const;
     };
 
     #endif // NONLINEARSOLVER1D_SECANT_H

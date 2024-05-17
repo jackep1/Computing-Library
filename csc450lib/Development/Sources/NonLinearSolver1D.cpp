@@ -103,7 +103,7 @@ NonLinearSolverRecord1D NonLinearSolver1D_NewtonRaphson::solve(std::shared_ptr<F
     return NonLinearSolverRecord1D(x, func.get()->func(x), iterations, success);
 }
 
-NonLinearSolverRecord1D NonLinearSolver1D_secant::solve(std::shared_ptr<Function1D> func, float x0, float x1, int n, float tolerance) {
+NonLinearSolverRecord1D NonLinearSolver1D_secant::solve(std::shared_ptr<Function1D> func, float x0, float x1, int n, float tolerance) const {
 
     int iterations = 0;
     bool success = true;
