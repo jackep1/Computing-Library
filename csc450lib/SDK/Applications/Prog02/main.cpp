@@ -117,7 +117,7 @@ int main(int argc, const char* argv[])
     */
 
     // Non-linear solver for finding the collision locationsm
-    NonLinearSolver1D_bisection bisection_solver;
+    NonLinearSolver1D_NewtonRaphson NLS;
 
     // Flat surfaces with different elasticity values
     shared_ptr<FlatSurface1D> flat_elastic_surface = make_shared<FlatSurface1D>(1);
@@ -146,11 +146,11 @@ int main(int argc, const char* argv[])
     for (int i = 0; i < 5; i++) {
 
         // Determine a search bracket for the location of the collision
-        vector<float> search_bracket = bisection_solver.find_search_bracket_collision(SEARCH_TOLERANCE, ballistic, flight);
+        vector<float> search_bracket = NLS.find_search_bracket_collision(SEARCH_TOLERANCE, ballistic, flight);
         cout << "Search bracket for bounce time: " << search_bracket[0] << " - " << search_bracket[1] << endl;
 
         // Find the exact time of collision
-        NonLinearSolverRecord1D bounce = bisection_solver.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight), search_bracket[0], search_bracket[1], 10000, SEARCH_TOLERANCE);
+        NonLinearSolverRecord1D bounce = NLS.solve(static_pointer_cast<csc450lib_calc::Function1D>(flight), (search_bracket[0] + search_bracket[1]) / 2, 0, 10000, SEARCH_TOLERANCE);
         if (!bounce.getIsSuccess()) {
             cout << "Bisection failed to find bounce location" << endl;
             exit(1);

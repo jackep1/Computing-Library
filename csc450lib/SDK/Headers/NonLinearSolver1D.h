@@ -105,7 +105,7 @@ namespace csc450lib_calc {
     #ifndef NONLINEARSOLVER1D_BISECTION_H
     #define NONLINEARSOLVER1D_BISECTION_H
 
-    class NonLinearSolver1D_bisection : public csc450lib_calc::NonLinearSolver1D {
+    class NonLinearSolver1D_bisection : public NonLinearSolver1D {
 
         public:
             /**
@@ -118,7 +118,7 @@ namespace csc450lib_calc {
              * @param tol the tolerance
              * @return the record of the solution
             */
-            csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol) const;
+            NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> func, float a, float b, int n, float tol) const;
     };
 
     #endif // NONLINEARSOLVER1D_BISECTION_H
@@ -128,20 +128,20 @@ namespace csc450lib_calc {
     #ifndef NONLINEARSOLVER1D_NEWTONRAPHSON_H
     #define NONLINEARSOLVER1D_NEWTONRAPHSON_H
 
-    class NonLinearSolver1D_NewtonRaphson : public csc450lib_calc::NonLinearSolver1D {
+    class NonLinearSolver1D_NewtonRaphson : public NonLinearSolver1D {
 
         public:
             /**
              * Uses the non-linear Newton-Raphson method to solve the given function
              * 
              * @param func the function to solve
-             * @param a the lower end of the search bracket
-             * @param b the upper end of the search bracket
+             * @param x0 the initial guess (should be near the solution)
+             * @param blank unnecessary parameter for this particular method
              * @param n the maximum number of iterations to perform
              * @param tolerance the tolerance to use when determining if the solution is close enough
              * @return a record containing the solution, the value of the function at the solution, the number of iterations performed, and whether the solution was successful
             */
-            csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float x0, int n, float tol);
+            NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> func, float x0, float blank, int n, float tol) const;
     };
 
     #endif // NONLINEARSOLVER1D_NEWTONRAPHSON_H
@@ -151,7 +151,7 @@ namespace csc450lib_calc {
     #ifndef NONLINEARSOLVER1D_SECANT_H
     #define NONLINEARSOLVER1D_SECANT_H
 
-    class NonLinearSolver1D_secant : public csc450lib_calc::NonLinearSolver1D {
+    class NonLinearSolver1D_secant : public NonLinearSolver1D {
 
         public:
             /**
@@ -164,7 +164,7 @@ namespace csc450lib_calc {
              * @param tolerance the tolerance to use when determining if the solution is close enough
              * @return a record containing the solution, the value of the function at the solution, the number of iterations performed, and whether the solution was successful
             */
-            csc450lib_calc::NonLinearSolverRecord1D solve(std::shared_ptr<csc450lib_calc::Function1D> func, float a, float b, int n, float tol);
+            NonLinearSolverRecord1D solve(std::shared_ptr<Function1D> func, float x0, float x1, int n, float tol);
     };
 
     #endif // NONLINEARSOLVER1D_SECANT_H

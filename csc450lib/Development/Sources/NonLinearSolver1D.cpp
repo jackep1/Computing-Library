@@ -20,10 +20,7 @@ std::vector<float> NonLinearSolver1D::find_search_bracket_collision(float TOL, s
     float right_height = ballistic.get()->getPosition(b)[1];
     
     // If right bracket is positive, increase b by 10% until negative value is found
-    //int count = 0;
-    //int max_count = 100;
-    // std::cout << "Initial bracket: " << a << " - " << b << std::endl;
-    while (right_height > 0 /*&& count < max_count*/) {
+    while (right_height > 0) {
         if (a < b) {
             a = b;
         }
@@ -36,26 +33,6 @@ std::vector<float> NonLinearSolver1D::find_search_bracket_collision(float TOL, s
 }
 
 NonLinearSolverRecord1D NonLinearSolver1D_bisection::solve(std::shared_ptr<Function1D> f, float a, float b, int n, float tol) const {
-    // int iterations = 0;
-    // bool success;
-    // float x = (a + b) / 2;
-    // float f0 = f.get()->func(x);
-    // while (abs(f0) > tol && iterations < n) {
-    //     if (f0 * f.get()->func(a) < 0) {
-    //         b = x;
-    //     } else {
-    //         a = x;
-    //     }
-    //     x = (a + b) / 2;
-    //     f0 = f.get()->func(x);
-    //     iterations++;
-    // }
-    // if (iterations == n) {
-    //     success = false;
-    // } else {
-    //     success = true;
-    // }
-    // return NonLinearSolverRecord1D(x, f.get()->func(x), iterations, success);
 
     int iterations = 0;
     bool success = false;
@@ -91,7 +68,7 @@ NonLinearSolverRecord1D NonLinearSolver1D_bisection::solve(std::shared_ptr<Funct
     return NonLinearSolverRecord1D(c, f.get()->func(c), iterations, success);
 }
 
-NonLinearSolverRecord1D NonLinearSolver1D_NewtonRaphson::solve(std::shared_ptr<Function1D> func, float x0, int n, float tolerance) {
+NonLinearSolverRecord1D NonLinearSolver1D_NewtonRaphson::solve(std::shared_ptr<Function1D> func, float x0, float blank, int n, float tolerance) const {
 
     int iterations = 0;
     bool success = true;
