@@ -41,12 +41,12 @@ std::vector<float> Surface1D::getOutgoingVelocity(float x, float Vinx, float Vin
 
     float numX = (Vinx * dx * dx) - (Viny * dx);
     float denomX = (dx * dx) + 1;
-    float Voutx = Vinx + (2 * a * numX / denomX);
+    float Voutx = Vinx + (2 * a * (numX / denomX) );
 
     float numY = Viny - (Vinx * dx);
     float denomY = (dx * dx) + 1;
-    float Vouty = Viny - (2 * a * numY / denomY);
-
+    float Vouty = Viny - (2 * a * (numY / denomY) );
+    
     return std::vector<float>{x, Voutx, Vouty};
 }
 
