@@ -157,6 +157,14 @@ class FlatSurface1D : public Surface1D {
         float func(float x) const;
 
         /**
+         * Gets the derivative of the surface at a given x value.
+         * 
+         * @param x the x value
+         * @return 0, the derivative of the surface at x
+        */
+        float dfunc(float x) const;
+
+        /**
          * @return whether the derivative of the surface is exact
         */
         bool derivativeIsExact() const;

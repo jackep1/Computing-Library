@@ -46,6 +46,7 @@ std::vector<float> Surface1D::getOutgoingVelocity(float x, float Vinx, float Vin
     float numY = Viny - (Vinx * dx);
     float denomY = (dx * dx) + 1;
     float Vouty = Viny - (2 * a * numY / denomY);
+
     return std::vector<float>{x, Voutx, Vouty};
 }
 
@@ -74,6 +75,10 @@ FlatSurface1D::FlatSurface1D(float alpha) : Surface1D(alpha) {}
 
 float FlatSurface1D::func(float x) const {
     return 1;
+}
+
+float FlatSurface1D::dfunc(float x) const {
+    return 0;
 }
 
 bool FlatSurface1D::derivativeIsExact() const {

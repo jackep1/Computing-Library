@@ -157,7 +157,7 @@ int main(int argc, const char* argv[])
         }
 
         float bounce_time = bounce.getXStar();
-
+        cout << "bounce location: " << ballistic.get()->getPosition(bounce_time)[0] << ", " << ballistic.get()->getPosition(bounce_time)[1] << endl;
         // Use the ballistic function info and bounce location to
         // find 10 points along the trajectory of the projectile
         // cout << bounce.getXStar() << ", " << bounce.getValStar() << endl;
@@ -173,7 +173,7 @@ int main(int argc, const char* argv[])
         for (int j = 0; j < 10; j++) {
             *flat_bounces[i] << trajectory[j][0] << " " << trajectory[j][1] << endl;
         }
-        cout << "Trajectory number " << i + 1 << " created and added to file" << endl;
+        // cout << "Trajectory number " << i + 1 << " created and added to file" << endl;
 
         // Use the bounce information to define a new ballistic functionca
         // where the projectile is launched from the bounce location with
