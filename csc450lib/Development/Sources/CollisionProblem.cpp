@@ -31,12 +31,22 @@ std::vector<float> BallisticFunction::getPositionAndVelocity(float t) const {
 Surface1D::Surface1D(float alpha) : a(alpha) {}
 
 std::vector<float> Surface1D::getOutgoingVelocity(float x, float Vinx, float Viny) const {
-    float n1 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * this->dfunc(x);
-    float n2 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * 1;
-    std::vector<float> normal_force = std::vector<float>{n1, n2};
-    std::vector<float> aN = std::vector<float>{a * normal_force[0], a * normal_force[1]};
-    std::vector<float> Vout = std::vector<float>{Vinx + aN[0], Viny + aN[1]};
-    return std::vector<float>{x, Vout[0], Vout[1]};
+    // float n1 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * this->dfunc(x);
+    // float n2 = (1 / sqrt(1 + this->dfunc(x) * this->dfunc(x))) * 1;
+    // std::vector<float> normal_force = std::vector<float>{n1, n2};
+    // std::vector<float> aN = std::vector<float>{a * normal_force[0], a * normal_force[1]};
+    // std::vector<float> Vout = std::vector<float>{Vinx + aN[0], Viny + aN[1]};
+
+    float dx = this->dfunc(x);
+
+    float numX = (Vinx * dx * dx) - (Viny * dx);
+    float denomX = (dx * dx) + 1;
+    float Voutx = Vinx + (2 * a * numX / denomX);
+
+    float numY = Viny - (Vinx * dx);
+    float denomY = (dx * dx) + 1;
+    float Vouty = Viny - (2 * a * numY / denomY);
+    return std::vector<float>{x, Voutx, Vouty};
 }
 
 void Surface1D::setAlpha(float alpha) {
